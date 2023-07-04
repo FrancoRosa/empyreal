@@ -1,6 +1,10 @@
 "use client";
 
-import { BsFillMoonStarsFill, BsFillSunFill, BsSunFill } from "react-icons/bs";
+import {
+  BsFillMoonStarsFill,
+  BsFillSunFill,
+  BsLink45Deg,
+} from "react-icons/bs";
 import {
   AiFillTwitterCircle,
   AiFillLinkedin,
@@ -20,8 +24,10 @@ export default function Home() {
       <main className="bg-white px-10 md:px-20 lg:px-40 dark:bg-gray-800">
         <section className="min-h-screen">
           <nav className="py-10 mb-12 flex justify-between">
-            <h1 className="font-extrabold text-transparent text-2xl bg-clip-text bg-gradient-to-r from-cyan-500 to-teal-300 font-burtons">
-              RTKLink
+            <h1 className="flex items-center font-extrabold text-transparent text-2xl bg-clip-text bg-gradient-to-r from-cyan-500 to-teal-300 font-nasa">
+              <span>rtk</span>
+              <BsLink45Deg className="font-extrabold text-2xl text-cyan-500" />
+              <span>link</span>
             </h1>
             <ul className="flex items-center">
               <li>

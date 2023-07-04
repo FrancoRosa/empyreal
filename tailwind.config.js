@@ -10,6 +10,8 @@ module.exports = {
     extend: {
       fontFamily: {
         burtons: "burtons",
+        game: "game",
+        nasa: "nasa",
       },
     },
   },
