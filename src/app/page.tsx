@@ -1,11 +1,6 @@
 "use client";
 
 import {
-  BsFillMoonStarsFill,
-  BsFillSunFill,
-  BsLink45Deg,
-} from "react-icons/bs";
-import {
   AiFillTwitterCircle,
   AiFillLinkedin,
   AiFillYoutube,
@@ -16,9 +11,7 @@ import antenna_img from "../../public/img/prod/antenna.png";
 import boards_img from "../../public/img/prod/boards.png";
 import case_img from "../../public/img/prod/case.png";
 import { useState } from "react";
-import Footer from "@/components/footer";
 import Brand from "@/components/brand";
-import Navbar from "@/components/navbar";
 import Products from "@/components/products";
 
 export default function Home() {
@@ -27,7 +20,7 @@ export default function Home() {
     <div className={darkMode ? "dark" : ""}>
       <main className="bg-white px-10 md:px-20 lg:px-40 dark:bg-gray-800">
         <section className="min-h-screen">
-          <Navbar />
+          {/* <Navbar /> */}
           <div className="text-center p-10">
             <div className="w-full flex justify-center">
               <Brand size="text-5xl" />
@@ -127,7 +120,7 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <Footer />
+        {/* <Footer /> */}
       </main>
     </div>
   );

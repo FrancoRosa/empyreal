@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import Brand from "./brand";
 import { AiOutlineShoppingCart } from "react-icons/ai";
