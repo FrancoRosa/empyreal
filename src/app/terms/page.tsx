@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export const metadata = {
   title: "rtklink | Terms and conditions",
   description: "Your positioning partner in the field",
@@ -95,12 +97,9 @@ export default function Terms() {
         <p className="py-2">
           <strong>Return Policy and Order Issues:</strong>&nbsp;check out
           our&nbsp;
-          <a
-            href="https://www.ardusimple.com/returns-and-order-issues/"
-            target="_blank"
-          >
+          <Link href="/issues" target="_blank">
             Returns and Order Issues
-          </a>
+          </Link>
           &nbsp;page.
         </p>
         <p className="py-2">
