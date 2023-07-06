@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 export const metadata = {
   title: "rtklink | Terms and conditions",
   description: "Your positioning partner in the field",
@@ -48,7 +46,7 @@ export default function Terms() {
       <p className="py-2 text-justify">
         – To exercise your rights of access, rectification, cancellation and
         opposition, you must send a written document identifying the reference
-        “Data Protection” to info@ardusimple.com.
+        “Data Protection” to info@rtklink.com.
       </p>
     </section>
   );

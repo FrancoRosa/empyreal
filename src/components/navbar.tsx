@@ -3,9 +3,11 @@ import { useState } from "react";
 import Brand from "./brand";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import Link from "next/link";
+import { useGlobalContext } from "@/context/store";
 
 const Navbar = () => {
   const [display, setDisplay] = useState(false);
+  const { count } = useGlobalContext();
 
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900 sticky">
@@ -78,6 +80,7 @@ const Navbar = () => {
                 </div>
               </a>
             </li>
+            <li>{count}</li>
           </ul>
         </div>
       </div>
