@@ -1,5 +1,5 @@
 "use client";
-import useLocalStorage from "@/js/storage";
+import { useLocalStorage, localStorage } from "@/js/storage";
 import { ProductType } from "@/js/types";
 import { createContext, useContext, Dispatch, SetStateAction } from "react";
 
@@ -9,7 +9,7 @@ interface ContextProps {
 }
 
 const GlobalContext = createContext<ContextProps>({
-  cart: JSON.parse(window.localStorage.getItem("cart") || "[]"),
+  cart: localStorage("cart", "[]"),
   setCart: (): ProductType[] => [],
 });
 

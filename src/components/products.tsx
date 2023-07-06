@@ -1,14 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import antenna_img from "../../public/img/prod/antenna.png";
-import antenna1_img from "../../public/img/prod/antenna1.png";
-import boards_img from "../../public/img/prod/boards.png";
-import case_img from "../../public/img/prod/case.png";
-import coffee_img from "../../public/img/prod/coffee.png";
-import stream_img from "../../public/img/prod/stream.png";
+
 import { useGlobalContext } from "@/context/store";
-import { CatalogType, ProductType } from "@/js/types";
+import { ProductType } from "@/js/types";
+import { images } from "@/js/images";
 const Products = () => {
   const { cart, setCart } = useGlobalContext();
 
@@ -17,8 +13,8 @@ const Products = () => {
       id: 1,
       name: "RTK enabled tracking board",
       description:
-        "Tracking element to achive centimer level accuracy, USB based ready to connect to any display or software",
-      image: boards_img,
+        "Tracking element to achieve centimeter level accuracy, USB based ready to connect to any display or software",
+      image: "boards",
       price: 10,
       price_hidden: true,
     },
@@ -27,7 +23,7 @@ const Products = () => {
       name: "GNSS Antenna",
       description:
         "The GNSS antenna is engineered to provide high-quality reception of satellite signals, even in challenging environments. Its compact and rugged design allows for easy installation on various platforms, including vehicles, buildings, and surveying equipment",
-      image: antenna1_img,
+      image: "antenna1",
       price: 20,
     },
     {
@@ -35,32 +31,30 @@ const Products = () => {
       name: "Correction stream 1 month",
       description:
         "Stand alone hardware can provide up meter level accuracy to improve this a correction stream from a static base is required then cm level accuracy is achieved",
-      image: boards_img,
+      image: "stream",
+      price: 10,
     },
     {
       id: 4,
       name: "Coffee",
       description:
         "Keep your boss happy by giving some coffee from time to time, buy high quality coffee here",
-      image: coffee_img,
+      image: "coffee",
       price: 200,
     },
     {
       id: 5,
       name: "Stream",
-      description:
-        "Keep your boss happy by giving some coffee from time to time, buy high quality coffee here",
-      image: stream_img,
+      description: "Buy your data streaming service",
+      image: "stream",
       price: 200,
     },
   ];
 
-  const handleAddToCard = (product: CatalogType) => {
-    const { id, name, price, description } = product;
+  const handleAddToCard = (product: ProductType) => {
     const newCart = [...cart];
-    newCart.push({ id, name, price, description });
+    newCart.push(product);
     setCart(newCart);
-    console.log({ id, name, price, description });
   };
 
   return (
@@ -71,7 +65,7 @@ const Products = () => {
           className="text-center shadow-lg p-10 rounded-xl my-10"
         >
           <Image
-            src={product.image}
+            src={images[product.image]}
             alt="board"
             className="mx-auto  h-40 w-auto"
           />
