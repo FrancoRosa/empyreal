@@ -1,6 +1,6 @@
 export default function Terms() {
   return (
-    <section>
+    <section className="px-20">
       <h3 className="text-center py-4 font-bold">
         General Terms and Conditions
       </h3>

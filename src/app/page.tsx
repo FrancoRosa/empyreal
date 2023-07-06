@@ -1,5 +1,3 @@
-"use client";
-
 import {
   AiFillTwitterCircle,
   AiFillLinkedin,
@@ -10,14 +8,12 @@ import Image from "next/image";
 import antenna_img from "../../public/img/prod/antenna.png";
 import boards_img from "../../public/img/prod/boards.png";
 import case_img from "../../public/img/prod/case.png";
-import { useState } from "react";
 import Brand from "@/components/brand";
 import Products from "@/components/products";
 
 export default function Home() {
-  const [darkMode, setDarkMode] = useState(false);
   return (
-    <div className={darkMode ? "dark" : ""}>
+    <div>
       <main className="bg-white px-10 md:px-20 lg:px-40 dark:bg-gray-800">
         <section className="min-h-screen">
           {/* <Navbar /> */}
