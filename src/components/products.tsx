@@ -39,7 +39,7 @@ const Products = () => {
     },
   ];
   return (
-    <div className="lg:flex gap-10">
+    <section className="lg:flex gap-10">
       {/* <div className="bg-gradient-to-b from-teal-500  dark:to-red-300 rounded-full w-80 h-80 mt-20 mx-auto md:h-96 md:w-96 p-4">
         <Image src={antenna_img} alt="calibrated antenna" className="" />
       </div> */}
@@ -55,13 +55,12 @@ const Products = () => {
           />
           <h3 className="text-lg font-medium pt-8 pb-2">{product.name}</h3>
           <p className="py-2">{product.description}</p>
-          <h4 className="py-4 text-teal-600">Applications</h4>
-          <p className="text-gray-800 py-1">Nautical</p>
-          <p className="text-gray-800 py-1">Construction</p>
-          <p className="text-gray-800 py-1">Mining</p>
+          <button className="bg-cyan-500 text-white rounded-lg py-2 px-4 font-bold hover:bg-teal-600">
+            Add to card
+          </button>
         </div>
       ))}
-    </div>
+    </section>
   );
 };
 export default Products;

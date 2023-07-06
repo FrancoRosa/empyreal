@@ -1,3 +1,8 @@
+export const metadata = {
+  title: "rtklink | Terms and conditions",
+  description: "Your positioning partner in the field",
+};
+
 export default function Terms() {
   return (
     <section className="px-20">

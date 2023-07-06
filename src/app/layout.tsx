@@ -5,11 +5,6 @@ import Footer from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
-  title: "rtklink",
-  description: "Your positioning partner in the field",
-};
-
 export default function RootLayout({
   children,
 }: {
