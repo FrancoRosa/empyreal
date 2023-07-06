@@ -1,25 +1,22 @@
 "use client";
 import useLocalStorage from "@/js/storage";
+import { ProductType } from "@/js/types";
 import { createContext, useContext, Dispatch, SetStateAction } from "react";
 
-type DataType = {
-  firstName: string;
-};
-
 interface ContextProps {
-  count: number;
-  setCount: Dispatch<SetStateAction<number>>;
+  cart: ProductType[];
+  setCart: Dispatch<SetStateAction<ProductType[]>>;
 }
 
 const GlobalContext = createContext<ContextProps>({
-  count: parseInt(window.localStorage.getItem("count") || "0"),
-  setCount: (): number => 0,
+  cart: JSON.parse(window.localStorage.getItem("cart") || "[]"),
+  setCart: (): ProductType[] => [],
 });
 
 export const GlobalContextProvider = ({ children }) => {
-  const [count, setCount] = useLocalStorage("count", 0);
+  const [cart, setCart] = useLocalStorage("cart", []);
   return (
-    <GlobalContext.Provider value={{ count, setCount }}>
+    <GlobalContext.Provider value={{ cart, setCart }}>
       {children}
     </GlobalContext.Provider>
   );
