@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} md:px-20 lg:px-40`}>
+      <body className={`${inter.className} lg:px-40 md:px-10`}>
         <GlobalContextProvider>
           <Navbar />
           {children}

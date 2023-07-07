@@ -2,7 +2,7 @@ import Brand from "./brand";
 
 export default function Intro() {
   return (
-    <section className="min-h-screen flex flex-col justify-center bg-cyan-50">
+    <section className="h-[calc(100vh-6em)] flex flex-col justify-center">
       <div className="w-full flex justify-center">
         <Brand size="text-5xl" />
       </div>

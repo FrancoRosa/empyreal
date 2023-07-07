@@ -31,3 +31,8 @@ a {
   font-family: "nasa";
   src: url("../../public/nasalization-rg.otf");
 }
+
+textarea,
+input {
+  outline: none;
+}

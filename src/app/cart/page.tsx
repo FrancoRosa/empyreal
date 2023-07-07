@@ -138,7 +138,9 @@ export default function Cart() {
               Checkout
             </button>
           </div>
-          {checkout && <Checkout />}
+          {checkout && (
+            <Checkout setCheckout={setCheckout} value={total + 15} />
+          )}
         </>
       ) : (
         <section className="flex justify-center items-center flex-col -mt-16 min-h-screen ">

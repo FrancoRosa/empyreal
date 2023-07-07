@@ -1,114 +1,236 @@
 "use client";
 
+import { monetize } from "@/js/helpers";
+import Brand from "./brand";
+import Link from "next/link";
 import axios from "axios";
 import { useState } from "react";
-import { ImSpinner8 } from "react-icons/im";
+import { BiLoaderAlt } from "react-icons/bi";
 
-export default function Checkout() {
-  const [loading1, setLoading1] = useState(false);
-  const [loading2, setLoading2] = useState(false);
-  const [token, setToken] = useState("");
+export default function Checkout({ setCheckout, value = 0 }) {
+  const [loading, setLoading] = useState(false);
+  const [error1, setError1] = useState("");
+  const [error2, setError2] = useState("");
 
-  const cardData = {
-    card_number: "4111111111111111",
-    cvv: "123",
-    expiration_month: 9,
-    expiration_year: "2025",
-    email: "ichard@piedpiper.com",
-    metadata: { dni: "5831543" },
-  };
+  const handlePayment = (e) => {
+    e.preventDefault();
+    setError1("");
+    setError2("");
+    setLoading(true);
 
-  const handleButtonCard = () => {
-    setLoading1(true);
+    const {
+      name: { value: name },
+      email: { value: email },
+      phone: { value: phone },
+      address: { value: address },
+      postal: { value: postal },
+      city: { value: city },
+      card: { value: card },
+      expiry: { value: expiry },
+      cvv: { value: cvv },
+    } = e.target.elements;
 
     axios
-      .post("https://secure.culqi.com/v2/tokens", cardData, {
-        headers: {
-          Authorization: "Bearer pk_test_XSbUCRi7oRuKojBu",
-          "Content-Type": "application/json",
-        },
+      .post("/api/charge", {
+        value,
+        name,
+        email,
+        phone,
+        address,
+        postal,
+        city,
+        card: card.replaceAll(" ", ""),
+        expiry,
+        cvv,
       })
-      .then((response) => {
-        const { id } = response.data;
-        console.log(response.data);
-        console.log({ id });
-        setToken(id);
-        setLoading1(false);
-      })
-      .catch((error) => {
-        setLoading1(false);
-
-        console.error(error);
-      });
-  };
-
-  const handleButtonBuy = () => {
-    console.log(token);
-    setLoading2(true);
-    const options = {
-      method: "POST",
-      url: "https://api.culqi.com/v2/charges",
-      headers: {
-        Authorization: "Bearer pk_test_XSbUCRi7oRuKojBu",
-        "Content-Type": "application/json",
-      },
-
-      data: {
-        amount: 10000,
-        currency_code: "PEN",
-        email: "richard@piedpiper.com",
-        source_id: "tkn_test_701ug3CDNJOAt5Q6, crd_test_TWsfemI22ypplGK6",
-        capture: true,
-        description: "Prueba",
-        installments: 2,
-        metadata: { dni: "70202170" },
-        antifraud_details: {
-          address: "Avenida Lima 213",
-          address_city: "Lima",
-          country_code: "PE",
-          first_name: "Richard",
-          last_name: "Hendricks",
-          phone_number: "999999987",
-        },
-        authentication_3DS: {
-          xid: "Y2FyZGluYWxjb21tZXJjZWF1dGg=",
-          cavv: "AAABAWFlmQAAAABjRWWZEEFgFz+=",
-          directoryServerTransactionId: "88debec7-a798-46d1-bcfb-db3075fedb82",
-          eci: "06",
-          protocolVersion: "2.1.0",
-        },
-      },
-    };
-
-    axios(options)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
+      .then((res) => {
+        setLoading(false);
+        if (res.data.object === "error") {
+          setError1(res.data.merchant_message);
+          setError2(res.data.user_message);
+        }
+        console.log(res);
       });
   };
 
   return (
-    <section className="min-h-screen flex flex-col justify-center items-center bg-cyan-50">
-      <button
-        onClick={handleButtonCard}
-        disabled={loading1}
-        className="flex gap-4 justify-center items-center rounded-lg px-4 py-2 bg-cyan-600 text-white w-60"
-      >
-        {loading1 && <ImSpinner8 className="animate-spin" />}
-        Get token card
-      </button>
-      <p>{token || "token"}</p>
-      <hr />
-      <button
-        onClick={handleButtonBuy}
-        disabled={loading2}
-        className="flex gap-4 justify-center items-center rounded-lg px-4 py-2 bg-cyan-600 text-white w-60"
-      >
-        {loading2 && <ImSpinner8 className="animate-spin" />}
-        Buy
-      </button>
-    </section>
+    <div className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-full justify-center items-center flex bg-cyan-800/70">
+      <div className="relative w-full max-w-md max-h-full">
+        <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+          <button
+            type="button"
+            className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+            data-modal-hide="authentication-modal"
+            onClick={() => setCheckout(false)}
+          >
+            <svg
+              className="w-3 h-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              />
+            </svg>
+            <span className="sr-only">Close modal</span>
+          </button>
+          <div className="px-6 py-6 lg:px-8">
+            <div className="flex justify-between items-center pt-2 pb-4">
+              <Brand />
+              <h3 className="pr-4 font-bold text-cyan-700">
+                Total: {monetize(value)}
+              </h3>
+            </div>
+            <form className="space-y-6" action="#" onSubmit={handlePayment}>
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Your name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  placeholder="Costumer Name"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Your email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  placeholder="name@company.com"
+                  required
+                />
+              </div>
+              <div>
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Your address information
+                  </label>
+                  <input
+                    type="card"
+                    name="phone"
+                    id="phone"
+                    className="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    placeholder="Phone"
+                    required
+                  />
+                  <input
+                    type="card"
+                    name="address"
+                    id="address"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    placeholder="Address"
+                    required
+                  />
+                </div>
+                <div className="flex justify-between gap-8 mt-4">
+                  <input
+                    type="tel"
+                    name="city"
+                    id="city"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    placeholder="City"
+                    required
+                  />
+                  <input
+                    type="tel"
+                    name="postal"
+                    id="postal"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    placeholder="Postal code"
+                    required
+                  />
+                </div>
+              </div>
+              <div>
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Card details
+                  </label>
+                  <input
+                    type="card"
+                    name="card"
+                    id="card"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    placeholder="#### #### #### ####"
+                    required
+                  />
+                </div>
+                <div className="flex justify-between gap-8 mt-3">
+                  <input
+                    type="tel"
+                    name="expiry"
+                    id="expiry"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    placeholder="MM/YY"
+                    data-mask="##/##"
+                    required
+                  />
+                  <input
+                    type="tel"
+                    name="cvv"
+                    id="cvv"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    placeholder="CVV"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="flex justify-between">
+                <div className="flex items-start">
+                  <div className="flex items-center h-5">
+                    <input
+                      id="remember"
+                      type="checkbox"
+                      value=""
+                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
+                      required
+                    />
+                  </div>
+                  <label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                    I have read the{" "}
+                    <Link
+                      href="/terms"
+                      className="text-cyan-700 hover:underline dark:text-cyan-500"
+                    >
+                      terms and conditions
+                    </Link>
+                  </label>
+                </div>
+              </div>
+              {error1 && (
+                <p className="text-sm text-red-800 text-center">{error1}</p>
+              )}
+              {error2 && (
+                <p className="text-sm text-red-800 text-center">{error2}</p>
+              )}
+              <button
+                type="submit"
+                className="relative tems-center w-full text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800 disabled:bg-gray-600"
+                disabled={loading}
+              >
+                {loading && (
+                  <BiLoaderAlt className="absolute bottom-2 animate-spin text-2xl" />
+                )}
+                Pay
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
