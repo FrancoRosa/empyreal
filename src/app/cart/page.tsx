@@ -1,15 +1,18 @@
 "use client";
 
+import Checkout from "@/components/checkout";
 import { useGlobalContext } from "@/context/store";
 import { monetize } from "@/js/helpers";
 import { images } from "@/js/images";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AiFillMinusCircle, AiFillPlusCircle } from "react-icons/ai";
 import { BsFillTrashFill } from "react-icons/bs";
 
 export default function Cart() {
   const { cart, setCart } = useGlobalContext();
+  const [checkout, setCheckout] = useState(false);
 
   const productList = (cart: any) => {
     const products: any = {};
@@ -29,15 +32,16 @@ export default function Cart() {
     return Object.values(products);
   };
 
-  const handleAdd = (product) => {
+  const handleAdd = (product: { quantity: number }) => {
     const newProduct = { ...product };
+
     delete newProduct.quantity;
     const newCart = [...cart, newProduct];
     setList(productList(newCart));
     setCart(newCart);
   };
 
-  const handleSubtract = (product) => {
+  const handleSubtract = (product: { id: number }) => {
     if (cart.filter((p) => p.id === product.id).length > 1) {
       const removeIndex = cart.findIndex((p) => p.id == product.id);
       const newCart = [
@@ -59,7 +63,7 @@ export default function Cart() {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    const value = list.reduce((s, p) => s + p.price * p.quantity, 0);
+    const value = list.reduce((s, p) => s + p.price * p.quantity, 0) || 0;
     setTotal(value);
   }, [list]);
   return (
@@ -107,12 +111,46 @@ export default function Cart() {
           </div>
         </div>
       ))}
-      <h3 className="font-bold text-right">Total: {monetize(total)}</h3>
-      <div className="flex justify-end pt-4">
-        <button className="bg-cyan-700 text-white rounded-lg py-2 px-4">
-          Checkout
-        </button>
-      </div>
+
+      {cart.length > 0 ? (
+        <>
+          <table className="table-auto flex justify-end p-4">
+            <tbody>
+              <tr>
+                <td>Subtotal:</td>
+                <td className="pl-8 text-right">{monetize(total)}</td>
+              </tr>
+              <tr>
+                <td>Shipping:</td>
+                <td className="pl-8 text-right">{monetize(15)}</td>
+              </tr>
+              <tr className="font-semibold">
+                <td>Total:</td>
+                <td className="pl-8 text-right">{monetize(total + 15)}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div className="flex justify-end p-4 ">
+            <button
+              onClick={() => setCheckout((s) => !s)}
+              className="bg-cyan-700 text-white rounded-lg py-2 px-4"
+            >
+              Checkout
+            </button>
+          </div>
+          {checkout && <Checkout />}
+        </>
+      ) : (
+        <section className="flex justify-center items-center flex-col -mt-16 min-h-screen ">
+          <h1 className="font-bold text-xl">Your shopping cart is empty</h1>
+          <h3>
+            Start shopping{" "}
+            <Link className="text-cyan-700" href="/shop">
+              here
+            </Link>
+          </h3>
+        </section>
+      )}
     </>
   );
 }
