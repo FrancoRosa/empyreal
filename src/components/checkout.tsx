@@ -39,7 +39,7 @@ export default function Checkout({ setCheckout, value = 0 }) {
         address,
         postal,
         city,
-        card: card.replaceAll(" ", ""),
+        card,
         expiry,
         cvv,
       })

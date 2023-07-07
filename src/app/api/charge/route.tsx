@@ -1,5 +1,5 @@
 const axios = require("axios");
-const pub_key = "pk_test_XSbUCRi7oRuKojBu";
+const pub_key = process.env.PUB_KEY;
 
 export async function GET(request: Request) {
   return new Response(JSON.stringify({ message: "bad request" }));
@@ -7,18 +7,6 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   let payload = { message: "Request timeout" };
-  // {
-  //   value: 45,
-  //   name: 'MON 1102',
-  //   email: 'km115.franco@gmail.com',
-  //   phone: '984894723',
-  //   address: 'Jayton',
-  //   postal: '550436',
-  //   city: 'CUSCO',
-  //   card: '1234123412341234',
-  //   expiry: '12/12',
-  //   cvv: '123'
-  // }
 
   const body = await request.json();
   const {
@@ -35,7 +23,7 @@ export async function POST(request: Request) {
   } = body;
 
   const data = {
-    card_number: card,
+    card_number: card.replaceAll(" ", "").trim(),
     expiration_month: expiry.slice(0, 2),
     expiration_year: expiry.at(-2) + expiry.at(-1),
     cvv,
@@ -63,7 +51,7 @@ export async function POST(request: Request) {
         "Content-Type": "application/json",
       },
       data: {
-        amount: value,
+        amount: value * 100,
         currency_code: "USD",
         email,
         source_id: id,
