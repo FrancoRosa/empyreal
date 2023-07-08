@@ -5,4 +5,5 @@ export type ProductType = {
   description: string;
   image: string;
   price_hidden: boolean;
+  quantity?: number;
 };

@@ -1,9 +1,9 @@
 export const metadata = {
-  title: "rtklink | Terms and conditions",
+  title: "rtklink | Privacy policy",
   description: "Your positioning partner in the field",
 };
 
-export default function Terms() {
+export default function Privacy() {
   return (
     <section className="px-20 min-h-screen">
       <h3 className="text-center font-bold py-4">Privacy policy</h3>

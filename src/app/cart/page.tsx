@@ -14,7 +14,7 @@ export default function Cart() {
   const { cart, setCart } = useGlobalContext();
   const [checkout, setCheckout] = useState(false);
 
-  const productList = (cart: any) => {
+  const productList = (cart: any[] = []) => {
     const products: any = {};
     cart.forEach((product: any) => {
       if (product.id in products) {
@@ -32,11 +32,8 @@ export default function Cart() {
     return Object.values(products);
   };
 
-  const handleAdd = (product: { quantity: number }) => {
-    const newProduct = { ...product };
-
-    delete newProduct.quantity;
-    const newCart = [...cart, newProduct];
+  const handleAdd = (product: any) => {
+    const newCart = [...cart, product];
     setList(productList(newCart));
     setCart(newCart);
   };
@@ -53,17 +50,18 @@ export default function Cart() {
     }
   };
 
-  const handleRemove = (product) => {
+  const handleRemove = (product: any) => {
     const newCart = cart.filter((p) => p.id !== product.id);
     setList(productList(newCart));
     setCart(newCart);
   };
 
   const [list, setList] = useState(productList(cart));
-  const [total, setTotal] = useState(0);
+  const [total, setTotal] = useState<any>(0);
 
   useEffect(() => {
-    const value = list.reduce((s, p) => s + p.price * p.quantity, 0) || 0;
+    const value =
+      list.reduce((s: any, p: any) => s + p.price * p.quantity, 0) || 0;
     setTotal(value);
   }, [list]);
   return (
@@ -112,7 +110,7 @@ export default function Cart() {
         </div>
       ))}
 
-      {cart.length > 0 ? (
+      {cart?.length > 0 ? (
         <>
           <table className="table-auto flex justify-end p-4">
             <tbody>

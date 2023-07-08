@@ -7,12 +7,17 @@ import axios from "axios";
 import { useState } from "react";
 import { BiLoaderAlt } from "react-icons/bi";
 
-export default function Checkout({ setCheckout, value = 0 }) {
+interface CheckoutProps {
+  setCheckout: Function;
+  value?: number;
+}
+
+const Checkout: React.FC<CheckoutProps> = ({ setCheckout, value = 0 }) => {
   const [loading, setLoading] = useState(false);
   const [error1, setError1] = useState("");
   const [error2, setError2] = useState("");
 
-  const handlePayment = (e) => {
+  const handlePayment = (e: any) => {
     e.preventDefault();
     setError1("");
     setError2("");
@@ -72,9 +77,9 @@ export default function Checkout({ setCheckout, value = 0 }) {
             >
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
               />
             </svg>
@@ -219,7 +224,7 @@ export default function Checkout({ setCheckout, value = 0 }) {
               )}
               <button
                 type="submit"
-                className="relative tems-center w-full text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800 disabled:bg-gray-600"
+                className="relative w-full text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800 disabled:bg-gray-600"
                 disabled={loading}
               >
                 {loading && (
@@ -233,4 +238,5 @@ export default function Checkout({ setCheckout, value = 0 }) {
       </div>
     </div>
   );
-}
+};
+export default Checkout;

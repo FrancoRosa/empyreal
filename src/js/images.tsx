@@ -9,7 +9,7 @@ import trimble_zephyr_img from "../../public/img/prod/trimble_zephyr3.png";
 import ublox_img from "../../public/img/prod/ublox.jpg";
 import dell_img from "../../public/img/prod/dell.jpeg";
 
-export const images = {
+export const images: any = {
   antenna: antenna_img,
   boards: boards_img,
   case: case_img,

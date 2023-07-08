@@ -7,7 +7,7 @@ export const metadata = {
 export default function Shop() {
   return (
     <section className="pt-8">
-      <h1 className="text-center">Shop</h1>
+      <h1 className="text-center text-xl font-semibold">Shop</h1>
       <Products />
     </section>
   );

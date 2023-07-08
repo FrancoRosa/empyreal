@@ -13,7 +13,13 @@ const GlobalContext = createContext<ContextProps>({
   setCart: (): ProductType[] => [],
 });
 
-export const GlobalContextProvider = ({ children }) => {
+interface GlobProvProps {
+  children: any;
+}
+
+export const GlobalContextProvider: React.FC<GlobProvProps> = ({
+  children,
+}) => {
   const [cart, setCart] = useLocalStorage("cart", []);
   return (
     <GlobalContext.Provider value={{ cart, setCart }}>

@@ -80,11 +80,11 @@ export async function POST(request: Request) {
     try {
       const charge_result = await axios(options);
       console.log(charge_result.data);
-    } catch (error) {
+    } catch (error: any) {
       payload = error.response.data;
       console.log(error.response);
     }
-  } catch (error) {
+  } catch (error: any) {
     payload = error.response.data;
   }
 
