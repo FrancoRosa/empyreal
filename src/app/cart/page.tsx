@@ -137,7 +137,11 @@ export default function Cart() {
             </button>
           </div>
           {checkout && (
-            <Checkout setCheckout={setCheckout} value={total + 15} />
+            <Checkout
+              setCheckout={setCheckout}
+              value={total + 15}
+              list={list}
+            />
           )}
         </>
       ) : (
