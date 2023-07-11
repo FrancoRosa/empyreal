@@ -42,6 +42,7 @@ export default function Privacy() {
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const handleSubmit = (e: any) => {
+    e.preventDefault();
     setLoading(true);
     const myForm = e.target;
     const formData: any = new FormData(myForm);
@@ -71,7 +72,12 @@ export default function Privacy() {
       {success ? (
         <p className="text-center mt-10">{text.success[lang]}</p>
       ) : (
-        <form onSubmit={handleSubmit} data-netlify="true">
+        <form
+          onSubmit={handleSubmit}
+          data-netlify-recaptcha="true"
+          data-netlify="true"
+          name="support"
+        >
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               {text.label.name[lang]}
@@ -122,7 +128,7 @@ export default function Privacy() {
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-500 dark:focus:border-cyan-500"
             />
           </div>
-
+          <div data-netlify-recaptcha="true"></div>
           <button
             type="submit"
             className="relative w-40 text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800 disabled:bg-gray-600"
