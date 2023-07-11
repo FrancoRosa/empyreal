@@ -1,7 +1,5 @@
-export const metadata = {
-  title: "rtklink | Privacy policy",
-  description: "Your positioning partner in the field",
-};
+"use client";
+import { getLang } from "@/js/helpers";
 
 const text: any = {
   title: {
@@ -30,11 +28,12 @@ const text: any = {
   },
 };
 
-export default function Privacy({ params }: { params: { lang: string } }) {
+export default function Privacy() {
+  const lang = getLang();
   return (
     <section className="px-20 min-h-screen">
-      <h3 className="text-center font-bold py-4">{text.title[params.lang]}</h3>
-      {text.law[params.lang].map((t: any, i: number) => (
+      <h3 className="text-center font-bold py-4">{text.title[lang]}</h3>
+      {text.law[lang].map((t: any, i: number) => (
         <p key={i} className="py-2 text-justify">
           {t}
         </p>

@@ -1,5 +1,6 @@
 "use client";
 
+import { getLang } from "@/js/helpers";
 import axios from "axios";
 import { useState } from "react";
 import { BiLoaderAlt } from "react-icons/bi";
@@ -11,11 +12,34 @@ const text: any = {
   },
   success: {
     en: "Your message was successfully sent. A team member will reach you out shortly",
-    es: "Tu mensaje fue enviado. Uno de nuestrol colaboradores se pondra en contacto contigo a la brevedad",
+    es: "Tu mensaje fue enviado. Uno de nuestros colaboradores se pondra en contacto contigo a la brevedad",
+  },
+  submit: {
+    en: "Submit",
+    es: "Enviar",
+  },
+  label: {
+    name: {
+      en: "Name",
+      es: "Nombre",
+    },
+    email: {
+      en: "Email",
+      es: "Email",
+    },
+    subject: {
+      en: "Subject",
+      es: "Asunto",
+    },
+    message: {
+      en: "Message",
+      es: "Mensaje",
+    },
   },
 };
 
-export default function Privacy({ params }: { params: { lang: string } }) {
+export default function Privacy() {
+  const lang = getLang();
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const handleSubmit = (e: any) => {
@@ -47,15 +71,15 @@ export default function Privacy({ params }: { params: { lang: string } }) {
   return (
     <section className="px-20 min-h-screen">
       <h3 className="text-center font-semibold py-4 text-2xl">
-        {text.title[params.lang]}
+        {text.title[lang]}
       </h3>
       {success ? (
-        <p className="text-center mt-10">{text.success[params.lang]}</p>
+        <p className="text-center mt-10">{text.success[lang]}</p>
       ) : (
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Your name
+              {text.label.name[lang]}
             </label>
             <input
               type="text"
@@ -67,7 +91,7 @@ export default function Privacy({ params }: { params: { lang: string } }) {
           </div>
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Your email
+              {text.label.email[lang]}
             </label>
             <input
               type="email"
@@ -80,7 +104,7 @@ export default function Privacy({ params }: { params: { lang: string } }) {
 
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Subject
+              {text.label.subject[lang]}
             </label>
             <input
               type="text"
@@ -93,7 +117,7 @@ export default function Privacy({ params }: { params: { lang: string } }) {
 
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Message
+              {text.label.message[lang]}
             </label>
             <textarea
               id="message"
@@ -112,7 +136,7 @@ export default function Privacy({ params }: { params: { lang: string } }) {
             {loading && (
               <BiLoaderAlt className="absolute bottom-2 animate-spin text-2xl" />
             )}
-            Submit
+            {text.submit[lang]}
           </button>
         </form>
       )}

@@ -1,7 +1,5 @@
-export const metadata = {
-  title: "rtklink | Terms and conditions",
-  description: "Your positioning partner in the field",
-};
+"use client";
+import { getLang } from "@/js/helpers";
 
 const text: any = {
   title: {
@@ -46,11 +44,12 @@ const text: any = {
   },
 };
 
-export default function Terms({ params }: { params: { lang: string } }) {
+export default function Terms() {
+  const lang = getLang();
   return (
     <section className="px-20">
-      <h3 className="text-center py-4 font-bold">{text.title[params.lang]}</h3>
-      {text.law[params.lang].map((t: string, i: number) => {
+      <h3 className="text-center py-4 font-bold">{text.title[lang]}</h3>
+      {text.law[lang].map((t: string, i: number) => {
         const label = t.split(":")[0];
         const text = t.split(":")[1];
         return (

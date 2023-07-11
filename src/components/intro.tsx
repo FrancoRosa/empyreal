@@ -1,3 +1,5 @@
+"use client";
+import { getLang } from "@/js/helpers";
 import Brand from "./brand";
 
 const text: any = {
@@ -11,7 +13,8 @@ const text: any = {
   },
 };
 
-export default function Intro({ params }: { params: { lang: string } }) {
+export default function Intro() {
+  const lang = getLang();
   return (
     <section className="h-[calc(100vh-6em)] flex flex-col justify-center">
       <div className="w-full flex justify-center">
@@ -19,9 +22,9 @@ export default function Intro({ params }: { params: { lang: string } }) {
       </div>
 
       <p className="text-center text-md px-8 py-5 leading-8 text-gray-800 md:text-xl max-w-xl mx-auto dark:text-gray-300">
-        {text.intro1[params.lang]}
+        {text.intro1[lang]}
         <span className="text-cyan-700"> rtklink </span>
-        {text.intro2[params.lang]}
+        {text.intro2[lang]}
       </p>
     </section>
   );
