@@ -44,28 +44,24 @@ export default function Privacy() {
   const [success, setSuccess] = useState<boolean>(false);
   const handleSubmit = (e: any) => {
     setLoading(true);
-    e.preventDefault();
-    const {
-      name: { value: name },
-      email: { value: email },
-      subject: { value: subject },
-      message: { value: message },
-    } = e.target.elements;
-    const payload = {
-      "form-name": "Support form",
-      name,
-      email,
-      subject,
-      message,
-    };
-    const options = {
+    const myForm = e.target;
+    const formData: any = new FormData(myForm);
+
+    fetch("/", {
+      method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    };
-    axios.post("/", payload, options).then((res) => console.log(res));
-    setTimeout(() => {
-      setLoading(false);
-      setSuccess(true);
-    }, 3000);
+      body: new URLSearchParams(formData).toString(),
+    })
+      .then(() => {
+        console.log("Form successfully submitted");
+        setLoading(false);
+        setSuccess(true);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+        setSuccess(true);
+      });
   };
 
   return (
@@ -76,7 +72,7 @@ export default function Privacy() {
       {success ? (
         <p className="text-center mt-10">{text.success[lang]}</p>
       ) : (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} data-netlify="true">
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               {text.label.name[lang]}
