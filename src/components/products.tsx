@@ -5,11 +5,11 @@ import Image from "next/image";
 import { useGlobalContext } from "@/context/store";
 import { ProductType } from "@/js/types";
 import { images } from "@/js/images";
-import { monetize } from "@/js/helpers";
+import { getLang, monetize } from "@/js/helpers";
 import products from "@/js/products";
 const Products = () => {
   const { cart, setCart } = useGlobalContext();
-
+  const lang = getLang();
   const handleAddToCard = (product: ProductType) => {
     const newCart = [...cart];
     newCart.push(product);
@@ -18,7 +18,7 @@ const Products = () => {
 
   return (
     <section className="flex flex-wrap justify-around gap-8">
-      {products.map((product, index) => (
+      {products.map((product: any, index: number) => (
         <div
           key={index}
           className="relative text-center shadow-lg p-10 rounded-xl my-8 mx-4 w-[300px] h-[440px]"
@@ -28,8 +28,12 @@ const Products = () => {
             alt="board"
             className="mx-auto h-40 w-auto"
           />
-          <h3 className="text-lg font-medium pt-8 pb-2">{product.name}</h3>
-          <p className="text-sm line-clamp-4 h-[6em]">{product.description}</p>
+          <h3 className="text-lg font-medium pt-8 pb-2">
+            {product.name[lang]}
+          </h3>
+          <p className="text-sm line-clamp-4 h-[6em]">
+            {product.description[lang]}
+          </p>
           <p className="absolute top-8 right-8 font-semibold text-xl text-cyan-700">
             {monetize(product.price)}
           </p>

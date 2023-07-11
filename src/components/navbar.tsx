@@ -4,10 +4,35 @@ import Brand from "./brand";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import Link from "next/link";
 import { useGlobalContext } from "@/context/store";
+import { getLang } from "@/js/helpers";
+
+const text: any = {
+  home: {
+    en: "Home",
+    es: "Inicio",
+  },
+  shop: {
+    en: "Shop",
+    es: "Productos",
+  },
+  news: {
+    en: "News",
+    es: "Noticias",
+  },
+  support: {
+    en: "Support",
+    es: "Soporte",
+  },
+  brand: {
+    en: "Open main menu",
+    es: "Abrir menu principal",
+  },
+};
 
 const Navbar = () => {
   const [display, setDisplay] = useState(false);
   const { cart } = useGlobalContext();
+  const lang = getLang();
 
   return (
     <nav className="top-0 z-10 bg-white border-gray-200 dark:bg-gray-900 sticky">
@@ -50,7 +75,7 @@ const Navbar = () => {
                 href="/"
                 className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-cyan-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               >
-                Home
+                {text.home[lang]}
               </Link>
             </li>
             <li>
@@ -58,7 +83,7 @@ const Navbar = () => {
                 href="/shop"
                 className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-cyan-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               >
-                Shop
+                {text.shop[lang]}
               </Link>
             </li>
             <li>
@@ -66,15 +91,15 @@ const Navbar = () => {
                 href="#"
                 className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-cyan-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               >
-                News
+                {text.news[lang]}
               </Link>
             </li>
             <li>
               <Link
-                href="#"
+                href="/support"
                 className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-cyan-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               >
-                Support
+                {text.support[lang]}
               </Link>
             </li>
             <li>

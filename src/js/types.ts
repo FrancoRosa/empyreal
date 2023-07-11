@@ -1,8 +1,14 @@
 export type ProductType = {
   id: number;
-  name: string;
+  name: {
+    en: string;
+    es: string;
+  };
+  description: {
+    en: string;
+    es: string;
+  };
   price: number;
-  description: string;
   image: string;
   price_hidden: boolean;
   quantity?: number;

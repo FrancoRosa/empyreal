@@ -1,13 +1,46 @@
-// import Image from "next/image";
-
+"use client";
 import Link from "next/link";
 import Brand from "./brand";
+import { getLang } from "@/js/helpers";
+
+const text: any = {
+  resources: {
+    en: "Resources",
+    es: "Recursos",
+  },
+  privacy: {
+    en: "Privacy Policy",
+    es: "Politica de privacidad",
+  },
+  terms: {
+    en: "Terms & conditions",
+    es: "Terminos y condiciones",
+  },
+  rights: {
+    en: "All Rights Reserved",
+    es: "Derechos reservados",
+  },
+  contact: {
+    en: "Contact",
+    es: "Contactanos",
+  },
+  address: {
+    en: "Address",
+    es: "Direccion",
+  },
+  form: {
+    en: "Support form",
+    es: "Formulario de soporte",
+  },
+};
 
 const Footer = () => {
+  const lang = getLang();
+
   return (
-    <footer className="bg-white dark:bg-gray-900 sticky">
+    <footer className="bg-white dark:bg-gray-900 sticky text-sm">
       <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
-        <div className="md:flex md:justify-between">
+        <div className="xl:flex xl:justify-between">
           <div className="mb-6 md:mb-0">
             <Link href="/" className="flex items-center">
               <Brand />
@@ -16,7 +49,36 @@ const Footer = () => {
           <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
             <div>
               <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
-                Resources
+                {text.contact[lang]}
+              </h2>
+              <ul className="text-gray-600 dark:text-gray-400 font-medium">
+                <li className="mb-4">
+                  <a
+                    href="https://goo.gl/maps/P7BYb2WaYgZBi23m9"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    Urb. Kennedy B C-2, Wanchaq, Cusco
+                  </a>
+                </li>
+                <li className="mb-4">
+                  <a
+                    href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=support@rtklink.com"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    support@rtklink.com
+                  </a>
+                </li>
+                <li className="mb-4">
+                  <Link href="/support">{text.form[lang]}</Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
+                {text.resources[lang]}
               </h2>
               <ul className="text-gray-600 dark:text-gray-400 font-medium">
                 <li className="mb-4">
@@ -53,12 +115,12 @@ const Footer = () => {
               <ul className="text-gray-600 dark:text-gray-400 font-medium">
                 <li className="mb-4">
                   <Link href="/privacy" className="hover:underline">
-                    Privacy Policy
+                    {text.privacy[lang]}
                   </Link>
                 </li>
                 <li>
                   <Link href="terms" className="hover:underline">
-                    Terms &amp; Conditions
+                    {text.terms[lang]}
                   </Link>
                 </li>
               </ul>
@@ -72,7 +134,7 @@ const Footer = () => {
             <Link href="/" className="hover:underline">
               rtklink™
             </Link>
-            . All Rights Reserved.
+            . {text.rights[lang]}.
           </span>
           <div className="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
             <a

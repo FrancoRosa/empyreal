@@ -2,7 +2,7 @@
 
 import Checkout from "@/components/checkout";
 import { useGlobalContext } from "@/context/store";
-import { monetize } from "@/js/helpers";
+import { getLang, monetize } from "@/js/helpers";
 import { images } from "@/js/images";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,6 +13,7 @@ import { BsFillTrashFill } from "react-icons/bs";
 export default function Cart() {
   const { cart, setCart } = useGlobalContext();
   const [checkout, setCheckout] = useState(false);
+  const lang = getLang();
 
   const productList = (cart: any[] = []) => {
     const products: any = {};
@@ -75,7 +76,7 @@ export default function Cart() {
           />
           <div className="m-4 w-full">
             <div className="flex justify-between items-center border-b-2 border-gray-200">
-              <p className="font-bold">{p.name}</p>
+              <p className="font-bold">{p.name[lang]}</p>
               <button
                 onClick={() => handleRemove(p)}
                 className="text-gray-600 cursor-pointer m-2"
