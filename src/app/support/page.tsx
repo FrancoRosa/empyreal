@@ -1,7 +1,6 @@
 "use client";
 
 import { getLang } from "@/js/helpers";
-import axios from "axios";
 import { useState } from "react";
 import { BiLoaderAlt } from "react-icons/bi";
 
