@@ -10,9 +10,25 @@ import { useEffect, useState } from "react";
 import { AiFillMinusCircle, AiFillPlusCircle } from "react-icons/ai";
 import { BsFillTrashFill } from "react-icons/bs";
 
+const text: any = {
+  checkout: {
+    en: "Checkout",
+    es: "Pagar",
+  },
+  shipping: {
+    en: "Shipping",
+    es: "Envio",
+  },
+  unitPrice: {
+    en: "Unit price",
+    es: "Precio/unidad",
+  },
+};
+
 export default function Cart() {
   const { cart, setCart } = useGlobalContext();
   const [checkout, setCheckout] = useState(false);
+  const [total, setTotal] = useState<any>(0);
   const lang = getLang();
 
   const productList = (cart: any[] = []) => {
@@ -32,6 +48,8 @@ export default function Cart() {
     });
     return Object.values(products);
   };
+
+  const [list, setList] = useState(productList(cart));
 
   const handleAdd = (product: any) => {
     const newCart = [...cart, product];
@@ -57,14 +75,12 @@ export default function Cart() {
     setCart(newCart);
   };
 
-  const [list, setList] = useState(productList(cart));
-  const [total, setTotal] = useState<any>(0);
-
   useEffect(() => {
     const value =
       list.reduce((s: any, p: any) => s + p.price * p.quantity, 0) || 0;
     setTotal(value);
   }, [list]);
+
   return (
     <>
       {list.map((p: any) => (
@@ -86,7 +102,31 @@ export default function Cart() {
               </button>
             </div>
             <div className="flex justify-between">
-              <p>Unit price: {monetize(p.price)}</p>
+              <table>
+                <tbody className="text-left">
+                  <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <th
+                      scope="row"
+                      className="py-2 font-medium text-gray-900  dark:text-white"
+                    >
+                      {text.unitPrice[lang]}:
+                    </th>
+                    <td className="pl-6 py-2">{monetize(p.price)}</td>
+                  </tr>
+                  <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <th
+                      scope="row"
+                      className=" py-2 font-medium text-gray-900  dark:text-white"
+                    >
+                      Subtotal:
+                    </th>
+                    <td className="pl-6 py-2">
+                      {monetize(p.quantity * p.price)}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => handleSubtract(p)}
@@ -106,7 +146,6 @@ export default function Cart() {
                 </button>
               </div>
             </div>
-            <p>Subtotal: {monetize(p.quantity * p.price)}</p>
           </div>
         </div>
       ))}
@@ -120,7 +159,7 @@ export default function Cart() {
                 <td className="pl-8 text-right">{monetize(total)}</td>
               </tr>
               <tr>
-                <td>Shipping:</td>
+                <td>{text.shipping[lang]}</td>
                 <td className="pl-8 text-right">{monetize(15)}</td>
               </tr>
               <tr className="font-semibold">
@@ -132,9 +171,9 @@ export default function Cart() {
           <div className="flex justify-end p-4 ">
             <button
               onClick={() => setCheckout((s) => !s)}
-              className="bg-cyan-700 text-white rounded-lg py-2 px-4"
+              className="bg-cyan-700 text-white rounded-lg py-2 px-4 w-28"
             >
-              Checkout
+              {text.checkout[lang]}
             </button>
           </div>
           {checkout && (

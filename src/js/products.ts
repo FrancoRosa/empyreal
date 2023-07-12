@@ -147,7 +147,7 @@ const products = [
     },
     description: {
       en: "Rugged tablet preconfigured with augmented reality tool and tracking software to get the vehicles position in the field",
-      es: "Tableta resistente preconfigurada con herramienta de realidad aumentada y software de seguimiento para obtener la posición de los vehículos en el campo",
+      es: "Tablet resistente preconfigurada con herramienta de realidad aumentada y software de seguimiento para obtener la posición de los vehículos en el campo",
     },
     price: 650,
     image: "dell",

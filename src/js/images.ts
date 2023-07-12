@@ -7,7 +7,7 @@ import magnetic_mount_img from "../../public/img/prod/magnetic_mount.jpg";
 import trimble_av28_img from "../../public/img/prod/trimble_av28.png";
 import trimble_zephyr_img from "../../public/img/prod/trimble_zephyr3.png";
 import ublox_img from "../../public/img/prod/ublox.jpg";
-import dell_img from "../../public/img/prod/dell.jpeg";
+import dell_img from "../../public/img/prod/dell.png";
 
 export const images: any = {
   antenna: antenna_img,

@@ -1,12 +1,19 @@
 "use client";
 
 import Image from "next/image";
-
 import { useGlobalContext } from "@/context/store";
 import { ProductType } from "@/js/types";
 import { images } from "@/js/images";
 import { getLang, monetize } from "@/js/helpers";
 import products from "@/js/products";
+
+const text: any = {
+  add: {
+    en: "Add to cart",
+    es: "Añadir al carrito",
+  },
+};
+
 const Products = () => {
   const { cart, setCart } = useGlobalContext();
   const lang = getLang();
@@ -21,14 +28,14 @@ const Products = () => {
       {products.map((product: any, index: number) => (
         <div
           key={index}
-          className="relative text-center shadow-lg p-10 rounded-xl my-8 mx-4 w-[300px] h-[440px]"
+          className="relative text-center shadow-lg p-10 rounded-xl my-8 mx-4 w-[300px] h-[440px] text-sm"
         >
           <Image
             src={images[product.image]}
             alt="board"
             className="mx-auto h-40 w-auto"
           />
-          <h3 className="text-lg font-medium pt-8 pb-2">
+          <h3 className="font-semibold pt-4 pb-2 text-ellipsis line-clamp-2 ">
             {product.name[lang]}
           </h3>
           <p className="text-sm line-clamp-4 h-[6em]">
@@ -41,7 +48,7 @@ const Products = () => {
             onClick={() => handleAddToCard(product)}
             className="bg-cyan-500 text-white rounded-lg my-4 py-2 px-4 font-bold hover:bg-teal-600"
           >
-            Add to card
+            {text.add[lang]}
           </button>
         </div>
       ))}

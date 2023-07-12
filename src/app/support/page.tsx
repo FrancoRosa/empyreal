@@ -74,10 +74,12 @@ export default function Privacy() {
       ) : (
         <form
           onSubmit={handleSubmit}
-          data-netlify-recaptcha="true"
+          data-netlify-honeypot="bot-field"
           data-netlify="true"
           name="support"
+          method="POST"
         >
+          <input className="hidden" name="bot-field" />
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               {text.label.name[lang]}

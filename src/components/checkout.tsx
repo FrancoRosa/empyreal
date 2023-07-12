@@ -1,6 +1,6 @@
 "use client";
 
-import { monetize } from "@/js/helpers";
+import { getLang, monetize } from "@/js/helpers";
 import Brand from "./brand";
 import Link from "next/link";
 import axios from "axios";
@@ -13,6 +13,21 @@ interface CheckoutProps {
   list: any;
 }
 
+const text: any = {
+  payment: { en: "Payment success", es: "El pago fue realizado con exito" },
+  name: { en: "Name", es: "Nombre" },
+  client: { en: "Costumer name", es: "Nombre del cliente" },
+  email: { en: "Email", es: "Email" },
+  address: { en: "Address", es: "Direccion" },
+  phone: { en: "Phone", es: "Telefono" },
+  city: { en: "City", es: "Ciudad" },
+  postal: { en: "Postal code", es: "Codigo postal" },
+  card: { en: "Card details", es: "Información de tarjeta" },
+  read: { en: "I have read the", es: "Confirmo que he leido los" },
+  terms: { en: "terms and conditions", es: "terminos y condiciones" },
+  pay: { en: "Pay", es: "Pagar" },
+};
+
 const Checkout: React.FC<CheckoutProps> = ({
   setCheckout,
   value = 0,
@@ -22,6 +37,7 @@ const Checkout: React.FC<CheckoutProps> = ({
   const [error1, setError1] = useState("");
   const [error2, setError2] = useState("");
   const [success, setSuccess] = useState<boolean>(false);
+  const lang = getLang();
 
   const handlePayment = (e: any) => {
     e.preventDefault();
@@ -109,25 +125,25 @@ const Checkout: React.FC<CheckoutProps> = ({
               )}
             </div>
             {success ? (
-              <p className="text-center">Payment success</p>
+              <p className="text-center">{text.payment[lang]}</p>
             ) : (
               <form className="space-y-6" action="#" onSubmit={handlePayment}>
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Your name
+                    {text.name[lang]}
                   </label>
                   <input
                     type="text"
                     name="name"
                     id="name"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                    placeholder="Costumer Name"
+                    placeholder={text.client[lang]}
                     required
                   />
                 </div>
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Your email
+                    {text.email[lang]}
                   </label>
                   <input
                     type="email"
@@ -141,14 +157,14 @@ const Checkout: React.FC<CheckoutProps> = ({
                 <div>
                   <div>
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                      Your address information
+                      {text.address[lang]}
                     </label>
                     <input
                       type="card"
                       name="phone"
                       id="phone"
                       className="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                      placeholder="Phone"
+                      placeholder={text.phone[lang]}
                       required
                     />
                     <input
@@ -156,7 +172,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                       name="address"
                       id="address"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                      placeholder="Address"
+                      placeholder={text.address[lang]}
                       required
                     />
                   </div>
@@ -166,7 +182,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                       name="city"
                       id="city"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                      placeholder="City"
+                      placeholder={text.city[lang]}
                       required
                     />
                     <input
@@ -174,7 +190,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                       name="postal"
                       id="postal"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                      placeholder="Postal code"
+                      placeholder={text.postal[lang]}
                       required
                     />
                   </div>
@@ -182,7 +198,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                 <div>
                   <div>
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                      Card details
+                      {text.card[lang]}
                     </label>
                     <input
                       type="card"
@@ -225,12 +241,13 @@ const Checkout: React.FC<CheckoutProps> = ({
                       />
                     </div>
                     <label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                      I have read the{" "}
+                      {text.read[lang]}
                       <Link
                         href="/terms"
                         className="text-cyan-700 hover:underline dark:text-cyan-500"
                       >
-                        terms and conditions
+                        {" "}
+                        {text.terms[lang]}
                       </Link>
                     </label>
                   </div>
@@ -249,7 +266,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                   {loading && (
                     <BiLoaderAlt className="absolute bottom-2 animate-spin text-2xl" />
                   )}
-                  Pay
+                  {text.pay[lang]}
                 </button>
               </form>
             )}
