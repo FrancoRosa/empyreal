@@ -74,7 +74,7 @@ export default function Privacy() {
       ) : (
         <form
           onSubmit={handleSubmit}
-          data-netlify-honeypot="bot-field"
+          netlify-honeypot="bot-field"
           data-netlify="true"
           name="support"
           method="POST"
