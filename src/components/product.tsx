@@ -18,7 +18,7 @@ const Product = ({
   lang,
   setModal,
 }: {
-  product: ProductType;
+  product: any;
   lang: string;
   setModal: any;
 }) => {
