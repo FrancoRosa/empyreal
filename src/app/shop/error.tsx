@@ -7,7 +7,7 @@ export default function Error() {
     }
   };
   return (
-    <>
+    <div className="flex flex-col items-center h-[calc(100vh-25em)] justify-center">
       <p className="text-center  py-4 px-8">
         Something happened with your shopping cart, press below to fix it
       </p>
@@ -17,6 +17,6 @@ export default function Error() {
       >
         Reload
       </button>
-    </>
+    </div>
   );
 }
