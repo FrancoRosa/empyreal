@@ -76,9 +76,10 @@ export default function Privacy() {
           onSubmit={handleSubmit}
           netlify-honeypot="bot-field"
           data-netlify="true"
-          name="support"
+          name="supportForm"
           method="POST"
         >
+          <input type="hidden" name="form-name" value="supportForm" />
           <input className="hidden" name="bot-field" />
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
