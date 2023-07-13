@@ -1,6 +1,9 @@
 "use client";
 import { getLang } from "@/js/helpers";
 import Brand from "./brand";
+import { images } from "@/js/images";
+import Carousel from "./carousel";
+import Link from "next/link";
 
 const text: any = {
   intro1: {
@@ -11,12 +14,28 @@ const text: any = {
     en: "has successfully positioned itself as a global leader in this field. By leveraging our advanced technology solutions, we empower businesses to optimize their operations, streamline processes, and ultimately maximize productivity.",
     es: "se ha posicionado exitosamente como líder mundial en este campo. Al aprovechar nuestras soluciones tecnológicas avanzadas, potenciamos a las empresas para optimizar sus operaciones, agilizar los procesos y, en última instancia, maximizar la productividad.",
   },
+  solutions: {
+    en: "Our Solutions",
+    es: "Soluciones",
+  },
+  boards: {
+    en: "Development boards",
+    es: "Targetas de desarrollo",
+  },
+  antennas: {
+    en: "Antennas and accessories",
+    es: "Antenas y accesorios",
+  },
+  software: {
+    en: "Software and displays",
+    es: "Software y pantallas",
+  },
 };
 
 export default function Intro() {
   const lang = getLang();
   return (
-    <section className="h-[calc(100vh-6em)] flex flex-col justify-center">
+    <section className=" flex flex-col justify-center items-center">
       <div className="w-full flex justify-center">
         <Brand size="text-5xl" />
       </div>
@@ -26,6 +45,42 @@ export default function Intro() {
         <span className="text-cyan-700"> rtklink </span>
         {text.intro2[lang]}
       </p>
+      <h3 className="text-2xl  mt-10">{text.solutions[lang]}</h3>
+      <div className="flex items-center flex-col lg:flex-row lg:justify-between lg:w-full">
+        <div className="flex flex-col items-center">
+          <p className="text-semibold py-4">{text.boards[lang]}</p>
+          <Link href="/shop">
+            <Carousel
+              images={[images.boards, images.case, images.ublox]}
+              style="w-40 h-40 object-cover"
+            />
+          </Link>
+        </div>
+        <div className="flex flex-col items-center">
+          <p className="text-semibold py-4">{text.antennas[lang]}</p>
+          <Link href="/shop">
+            <Carousel
+              images={[
+                images.antenna,
+                images.magnetic_antenna,
+                images.magnetic_mount,
+                images.trimble_av28,
+                images.trimble_zephyr,
+              ]}
+              style="w-40 h-40 object-cover"
+            />
+          </Link>
+        </div>
+        <div className="flex flex-col items-center mb-10">
+          <p className="text-semibold py-4">{text.software[lang]}</p>
+          <Link href="/shop">
+            <Carousel
+              images={[images.dell, images.stream]}
+              style="w-40 h-40 object-cover"
+            />
+          </Link>
+        </div>
+      </div>
     </section>
   );
 }
