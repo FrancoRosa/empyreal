@@ -46,7 +46,7 @@ export default function Intro() {
         {text.intro2[lang]}
       </p>
       <h3 className="text-2xl  mt-10">{text.solutions[lang]}</h3>
-      <div className="flex items-center flex-col lg:flex-row lg:justify-between lg:w-full">
+      <div className="flex items-center flex-col lg:flex-row lg:justify-between lg:items-baseline lg:w-full">
         <div className="flex flex-col items-center">
           <p className="text-semibold py-4">{text.boards[lang]}</p>
           <Link href="/shop">
