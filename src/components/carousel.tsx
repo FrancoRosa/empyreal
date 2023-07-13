@@ -12,7 +12,6 @@ const Carousel = ({
   const [show, setShow] = useState<number>(0);
   useEffect(() => {
     const timer = setTimeout(() => {
-      console.log(show);
       setShow((s) => s + 1);
       if (show + 1 >= images.length) {
         setShow(0);
