@@ -119,7 +119,7 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href="terms" className="hover:underline">
+                  <Link href="/terms" className="hover:underline">
                     {text.terms[lang]}
                   </Link>
                 </li>

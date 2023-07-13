@@ -18,6 +18,10 @@ const text: any = {
     en: "Back",
     es: "Regresar",
   },
+  more: {
+    en: "More information",
+    es: "Mas informacion",
+  },
 };
 
 const Product = ({
@@ -67,7 +71,7 @@ const Product = ({
               {product.description[lang]}
             </p>
             <a href={product.link} className="text-cyan-700">
-              More information
+              {text.more[lang]}
             </a>
           </div>
         </div>
