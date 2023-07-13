@@ -104,8 +104,8 @@ const Navbar = () => {
             </li>
             <li>
               <Link
-                href="cart"
-                className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-cyan-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                href="/cart"
+                className="pl-3 block py-2 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-cyan-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               >
                 <AiOutlineShoppingCart className="absolute text-2xl" />
                 <div className="relative bottom-2 left-6 text-xs text-cyan-600 ">

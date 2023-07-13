@@ -37,8 +37,11 @@ const Products = () => {
       {modal && <CartModal product={product} setModal={setModal} lang={lang} />}
       <section className="flex flex-wrap justify-around gap-8">
         {products.map((product: any, index: number) => (
-          <Link key={index} href={`/shop/${product.id}`}>
-            <div className="relative text-center shadow-lg p-10 rounded-xl my-8 mx-4 w-[300px] h-[440px] text-sm">
+          <div
+            key={index}
+            className="relative text-center shadow-lg p-10 rounded-xl my-8 mx-4 w-[300px] h-[440px] text-sm hover:bg-slate-50"
+          >
+            <Link href={`/shop/${product.id}`}>
               <Image
                 src={images[product.image]}
                 alt="board"
@@ -53,14 +56,14 @@ const Products = () => {
               <p className="absolute top-8 right-8 font-semibold text-xl text-cyan-700">
                 {monetize(product.price)}
               </p>
-              <button
-                onClick={() => handleAddToCard(product)}
-                className="bg-cyan-500 text-white rounded-lg my-4 py-2 px-4 font-bold hover:bg-teal-600"
-              >
-                {text.add[lang]}
-              </button>
-            </div>
-          </Link>
+            </Link>
+            <button
+              onClick={() => handleAddToCard(product)}
+              className="bg-cyan-500 text-white rounded-lg my-4 py-2 px-4 font-bold hover:bg-teal-600"
+            >
+              {text.add[lang]}
+            </button>
+          </div>
         ))}
       </section>
     </>

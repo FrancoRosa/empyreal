@@ -23,6 +23,22 @@ const text: any = {
     en: "Unit price",
     es: "Precio/unidad",
   },
+  disclaimer: {
+    en: "* Delivery time between 4 to 7 days, depending on availability.",
+    es: "* Tiempo de envio 4 - 7 dias habiles, sugeto a disponibilidad.",
+  },
+  empty: {
+    en: "Your shopping cart is empty",
+    es: "Tu carrito de compras esta vacio",
+  },
+  start: {
+    en: "Start shopping ",
+    es: "Comienza a comprar ",
+  },
+  here: {
+    en: "here",
+    es: "aqui",
+  },
 };
 
 export default function Cart() {
@@ -84,18 +100,23 @@ export default function Cart() {
   return (
     <>
       {list.map((p: any) => (
-        <div key={p.id} className="flex">
-          <Image
-            src={images[p.image] || images.default}
-            alt="board"
-            className="h-40 w-40 p-4"
-          />
+        <div
+          key={p.id}
+          className="flex border-solid border-b-2 border-gray-200"
+        >
+          <Link href={`/shop/${p.id}`} className="m-0 p-0">
+            <Image
+              src={images[p.image] || images.default}
+              alt="board"
+              className="h-40 w-40 p-0 cursor-pointer hover:animate-fade-in "
+            />
+          </Link>
           <div className="m-4 w-full">
-            <div className="flex justify-between items-center border-b-2 border-gray-200">
+            <div className="flex justify-between items-center border-b-2 border-gray-200 hover:bg-gray-100">
               <p className="font-bold">{p.name[lang]}</p>
               <button
                 onClick={() => handleRemove(p)}
-                className="text-gray-600 cursor-pointer m-2"
+                className="text-gray-600 cursor-pointer m-2 hover:text-cyan-800"
                 title="Remove item"
               >
                 <BsFillTrashFill />
@@ -152,6 +173,7 @@ export default function Cart() {
 
       {cart?.length > 0 ? (
         <>
+          <p className="text-sm">{text.disclaimer[lang]}</p>
           <table className="table-auto flex justify-end p-4">
             <tbody>
               <tr>
@@ -186,11 +208,11 @@ export default function Cart() {
         </>
       ) : (
         <section className="flex justify-center items-center flex-col -mt-16 min-h-screen ">
-          <h1 className="font-bold text-xl">Your shopping cart is empty</h1>
+          <h1 className="font-bold text-xl">{text.empty[lang]}</h1>
           <h3>
-            Start shopping{" "}
+            {text.start[lang]}
             <Link className="text-cyan-700" href="/shop">
-              here
+              {text.here[lang]}
             </Link>
           </h3>
         </section>
