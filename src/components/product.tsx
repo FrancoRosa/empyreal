@@ -62,9 +62,14 @@ const Product = ({
             alt="board"
             className="mx-auto h-56 w-56 p-4"
           />
-          <p className="text-sm line-clamp-6 h-[10em] text-justify">
-            {product.description[lang]}
-          </p>
+          <div>
+            <p className="text-sm line-clamp-6 h-[10em] text-justify">
+              {product.description[lang]}
+            </p>
+            <a href={product.link} className="text-cyan-700">
+              More information
+            </a>
+          </div>
         </div>
 
         <div className="flex justify-around">

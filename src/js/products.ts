@@ -12,6 +12,7 @@ const products = [
     price: 90,
     image: "magnetic_antenna",
     price_hidden: false,
+    link: "https://www.ead-ltd.com/wp-content/uploads/2019/08/8111D-datasheet.pdf",
   },
   {
     id: 2,
@@ -26,6 +27,7 @@ const products = [
     price: 180,
     image: "antenna",
     price_hidden: false,
+    link: "",
   },
   {
     id: 3,
@@ -40,6 +42,7 @@ const products = [
     price: 700,
     image: "trimble_av28",
     price_hidden: false,
+    link: "https://oemgnss.trimble.com/product/trimble-av28/?tab=support",
   },
   {
     id: 4,
@@ -54,20 +57,22 @@ const products = [
     price: 1300,
     image: "trimble_zephyr",
     price_hidden: false,
+    link: "https://oemgnss.trimble.com/product/trimble-zephyr-3-rugged/",
   },
   {
     id: 5,
     name: {
       en: "RTK Dual tracking board",
-      es: "Placa de seguimiento dual RTK",
+      es: "Placa de rastreo dual RTK",
     },
     description: {
-      en: "rtklink board, centimeter accuracy, and precise heading, USB based ready to connect to any display or software",
-      es: "Placa rtklink, precisión centimétrica y dirección precisa, lista para conectar a cualquier pantalla o software a través de USB.",
+      en: "rtklink board, centimeter accuracy, and precise heading, USB based ready to connect to any display or software by its USB connectors, it contains two ZED-F9P boards for a rover & moving-base configuration",
+      es: "Placa rtklink, precisión centimétrica y dirección precisa, lista para conectar a cualquier pantalla o software a través de USB. Contiene dos placas ZED-F9P de Ublox para una configuracion rover & moving-base",
     },
     price: 680,
     image: "boards",
     price_hidden: false,
+    link: "https://www.mouser.fi/pdfDocs/ZED-F9P_ProductSummary_UBX-17005151-2.pdf",
   },
   {
     id: 6,
@@ -82,6 +87,7 @@ const products = [
     price: 250,
     image: "stream",
     price_hidden: false,
+    link: "http://www.euref.eu/symposia/2018Amsterdam/03-02-Soehne.pdf",
   },
   {
     id: 7,
@@ -96,6 +102,7 @@ const products = [
     price: 2500,
     image: "stream",
     price_hidden: false,
+    link: "http://www.euref.eu/symposia/2018Amsterdam/03-02-Soehne.pdf",
   },
   {
     id: 8,
@@ -110,6 +117,7 @@ const products = [
     price: 30,
     image: "magnetic_mount",
     price_hidden: false,
+    link: "",
   },
   {
     id: 9,
@@ -124,6 +132,7 @@ const products = [
     price: 310,
     image: "ublox",
     price_hidden: false,
+    link: "https://cdn.sparkfun.com/assets/f/8/d/6/d/ZED-F9P-02B_DataSheet_UBX-21023276.pdf",
   },
   {
     id: 10,
@@ -138,6 +147,7 @@ const products = [
     price: 10,
     image: "case",
     price_hidden: false,
+    link: "",
   },
   {
     id: 11,
@@ -146,12 +156,13 @@ const products = [
       es: "Dell Rugged 7212",
     },
     description: {
-      en: "Rugged tablet preconfigured with augmented reality tool and tracking software to get the vehicles position in the field",
-      es: "Tablet resistente preconfigurada con herramienta de realidad aumentada y software de seguimiento para obtener la posición de los vehículos en el campo",
+      en: "Rugged tablet preconfigured with augmented reality tool and tracking software to get the vehicles position in the field. This article contains just the tablet with one battery. Keyboard and additional accesories are sold separatelly.",
+      es: "Tablet resistente preconfigurada con herramienta de realidad aumentada y software de seguimiento para obtener la posición de los vehículos en el campo. Este articulo solo contine la tablet y una bateria. Accesorios adicionales como el teclado se venden por separado",
     },
     price: 650,
     image: "dell",
     price_hidden: false,
+    link: "http://www.ongov.net/911/documents/latitude-rugged-extreme-tablet-ecosystem-guidenew.pdf",
   },
 ];
 
