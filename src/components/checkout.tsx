@@ -6,6 +6,7 @@ import Link from "next/link";
 import axios from "axios";
 import { useState } from "react";
 import { BiLoaderAlt } from "react-icons/bi";
+import { setTimeout } from "timers";
 
 interface CheckoutProps {
   setCheckout: Function;
@@ -80,9 +81,12 @@ const Checkout: React.FC<CheckoutProps> = ({
           setError2(res.data.user_message);
         } else {
           //TODO: Send sucessfull order to DB
-          setSuccess(true);
+
           setMsg1(res.data.merchant_message);
           setMsg2(res.data.user_message);
+          setTimeout(() => {
+            setSuccess(true);
+          }, 5000);
         }
         console.log(res);
       });

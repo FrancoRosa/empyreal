@@ -1,3 +1,5 @@
+import { setDBOrder } from "@/js/supabase";
+
 const axios = require("axios");
 const pub_key = process.env.PUB_KEY;
 
@@ -20,6 +22,7 @@ export async function POST(request: Request) {
     card,
     expiry,
     cvv,
+    list,
   } = body;
 
   const data = {
@@ -86,6 +89,13 @@ export async function POST(request: Request) {
     try {
       const charge_result = await axios(options);
       console.log(charge_result.data);
+      payload = charge_result.data;
+      setDBOrder(value, name, address, postal, city, email, list).then(
+        (res) => {
+          console.log(res);
+          console.log("Order saved on DB");
+        }
+      );
     } catch (error: any) {
       payload = error.response.data;
       console.log(error.response);
