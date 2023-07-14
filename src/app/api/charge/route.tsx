@@ -28,7 +28,13 @@ export async function POST(request: Request) {
     expiration_year: expiry.at(-2) + expiry.at(-1),
     cvv,
     email,
-    metadata: { name, phone, address, postal, city },
+    metadata: {
+      name,
+      phone,
+      address,
+      postal,
+      city,
+    },
   };
 
   try {

@@ -36,6 +36,8 @@ const Checkout: React.FC<CheckoutProps> = ({
   const [loading, setLoading] = useState(false);
   const [error1, setError1] = useState("");
   const [error2, setError2] = useState("");
+  const [msg1, setMsg1] = useState("");
+  const [msg2, setMsg2] = useState("");
   const [success, setSuccess] = useState<boolean>(false);
   const lang = getLang();
 
@@ -69,17 +71,18 @@ const Checkout: React.FC<CheckoutProps> = ({
         card,
         expiry,
         cvv,
+        list,
       })
       .then((res) => {
         setLoading(false);
         if (res.data.object === "error") {
           setError1(res.data.merchant_message);
           setError2(res.data.user_message);
-          setTimeout(() => {
-            setSuccess(true);
-            setError1("");
-            setError1("");
-          }, 3000);
+        } else {
+          //TODO: Send sucessfull order to DB
+          setSuccess(true);
+          setMsg1(res.data.merchant_message);
+          setMsg2(res.data.user_message);
         }
         console.log(res);
       });
@@ -257,6 +260,12 @@ const Checkout: React.FC<CheckoutProps> = ({
                 )}
                 {error2 && (
                   <p className="text-sm text-red-800 text-center">{error2}</p>
+                )}
+                {msg1 && (
+                  <p className="text-sm text-green-800 text-center">{msg1}</p>
+                )}
+                {msg2 && (
+                  <p className="text-sm text-green-800 text-center">{msg2}</p>
                 )}
                 <button
                   type="submit"
