@@ -2,6 +2,7 @@ import { setDBOrder } from "@/js/supabase";
 
 const axios = require("axios");
 const pub_key = process.env.PUB_KEY;
+const prv_key = process.env.PRV_KEY;
 
 export async function GET(request: Request) {
   return new Response(JSON.stringify({ message: "bad request" }));
@@ -52,16 +53,17 @@ export async function POST(request: Request) {
       }
     );
     const { id, metadata } = token_result.data;
+
     const options = {
       method: "POST",
       url: "https://api.culqi.com/v2/charges",
       headers: {
-        Authorization: `Bearer ${pub_key}`,
+        Authorization: `Bearer ${prv_key}`,
         "Content-Type": "application/json",
       },
       data: {
         amount: value * 100,
-        currency_code: "USD",
+        currency_code: "PEN",
         email,
         source_id: id,
         capture: true,
@@ -69,12 +71,12 @@ export async function POST(request: Request) {
         installments: 2,
         metadata,
         antifraud_details: {
-          address: "Avenida Lima 213",
-          address_city: "Lima",
-          country_code: "PE",
-          first_name: "Richard",
-          last_name: "Hendricks",
-          phone_number: "999999987",
+          address,
+          address_city: city,
+          country_code: "US",
+          first_name: name.split(" ")[0],
+          last_name: name.split(" ")[1] || name,
+          phone_number: phone,
         },
         authentication_3DS: {
           xid: "Y2FyZGluYWxjb21tZXJjZWF1dGg=",
@@ -98,7 +100,7 @@ export async function POST(request: Request) {
       );
     } catch (error: any) {
       payload = error.response.data;
-      console.log(error.response);
+      console.log(error.response.data);
     }
   } catch (error: any) {
     payload = error.response.data;
