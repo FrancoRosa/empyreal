@@ -10,6 +10,51 @@ import { useEffect, useState } from "react";
 import { AiFillMinusCircle, AiFillPlusCircle } from "react-icons/ai";
 import { BsFillTrashFill } from "react-icons/bs";
 
+import { CardPayment, initMercadoPago } from "@mercadopago/sdk-react";
+initMercadoPago("TEST-cfbe0b39-952a-49d2-a41a-50fc1e9f967e");
+
+const initialization = {
+  amount: 100,
+};
+
+const onSubmit = async (formData) => {
+  // callback llamado al hacer clic en el botón enviar datos
+  // return new Promise((resolve, reject) => {
+  //   fetch('/process_payment', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(formData),
+  //   })
+  //     .then(response) => response.json())
+  //     .then((response) => {
+  //       // recibir el resultado del pago
+  //       resolve();
+  //     })
+  //     .catch((error) => {
+  //       // manejar la respuesta de error al intentar crear el pago
+  //       reject();
+  //     });
+  // });
+  console.log("SUMMITED");
+};
+
+const onError = async (error) => {
+  // callback llamado para todos los casos de error de Brick
+  console.log("ERROR");
+
+  console.log(error);
+};
+
+const onReady = async () => {
+  /*
+    Callback llamado cuando Brick está listo.
+    Aquí puedes ocultar cargamentos de su sitio, por ejemplo.
+  */
+  console.log("READY");
+};
+
 const text: any = {
   checkout: {
     en: "Checkout",
@@ -199,10 +244,16 @@ export default function Cart() {
             </button>
           </div>
           {checkout && (
-            <Checkout
-              setCheckout={setCheckout}
-              value={total + 15}
-              list={list}
+            // <Checkout
+            //   setCheckout={setCheckout}
+            //   value={total + 15}
+            //   list={list}
+            // />
+            <CardPayment
+              initialization={initialization}
+              onSubmit={onSubmit}
+              onReady={onReady}
+              onError={onError}
             />
           )}
         </>
