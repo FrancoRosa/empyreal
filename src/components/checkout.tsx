@@ -40,13 +40,15 @@ const Checkout: React.FC<CheckoutProps> = ({
   const [msg1, setMsg1] = useState("");
   const [msg2, setMsg2] = useState("");
   const [success, setSuccess] = useState<boolean>(false);
+  const [issuer, setIssuer] = useState<boolean>(false);
   const lang = getLang();
 
   const handlePayment = (e: any) => {
     e.preventDefault();
     setError1("");
     setError2("");
-    setLoading(true);
+
+    // setLoading(true);
 
     const {
       name: { value: name },
@@ -58,6 +60,7 @@ const Checkout: React.FC<CheckoutProps> = ({
       card: { value: card },
       expiry: { value: expiry },
       cvv: { value: cvv },
+      issuer: { value: issuer },
     } = e.target.elements;
 
     axios
@@ -72,27 +75,31 @@ const Checkout: React.FC<CheckoutProps> = ({
         card,
         expiry,
         cvv,
+        issuer,
         list,
       })
       .then((res) => {
-        setLoading(false);
-        if (res.data.object === "error") {
-          setError1(res.data.merchant_message);
-          setError2(res.data.user_message);
-        } else {
-          //TODO: Send sucessfull order to DB
+        // setLoading(false);
+        // if (res.data.object === "error") {
+        //   setError1(res.data.merchant_message);
+        //   setError2(res.data.user_message);
+        // } else {
+        //   //TODO: Send sucessfull order to DB
 
-          setMsg1(res.data.merchant_message);
-          setMsg2(res.data.user_message);
-          setTimeout(() => {
-            setSuccess(true);
-          }, 5000);
-        }
+        //   setMsg1(res.data.merchant_message);
+        //   setMsg2(res.data.user_message);
+        //   setTimeout(() => {
+        //     setSuccess(true);
+        //   }, 5000);
+        // }
         console.log(res);
       });
   };
 
-  console.log(list);
+  const handleSelect = (e: any) => {
+    if (e.target.value === "") setIssuer(false);
+    else setIssuer(true);
+  };
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-full justify-center items-center flex bg-cyan-800/70">
@@ -162,20 +169,25 @@ const Checkout: React.FC<CheckoutProps> = ({
                   />
                 </div>
                 <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    {text.phone[lang]}
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    id="phone"
+                    className="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    placeholder={text.phone[lang]}
+                    required
+                  />
+                </div>
+                <div>
                   <div>
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                       {text.address[lang]}
                     </label>
                     <input
-                      type="card"
-                      name="phone"
-                      id="phone"
-                      className="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                      placeholder={text.phone[lang]}
-                      required
-                    />
-                    <input
-                      type="card"
+                      type="tel"
                       name="address"
                       id="address"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
@@ -207,30 +219,50 @@ const Checkout: React.FC<CheckoutProps> = ({
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                       {text.card[lang]}
                     </label>
-                    <input
-                      type="card"
-                      name="card"
-                      id="card"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                      placeholder="#### #### #### ####"
-                      required
-                    />
+                    <div className="flex justify-between gap-4 mt-3">
+                      <input
+                        type="card"
+                        name="card"
+                        id="card"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                        placeholder="#### #### #### ####"
+                        required
+                      />
+                      <input
+                        type="tel"
+                        name="expiry"
+                        id="expiry"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-24 p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                        placeholder="MM/YY"
+                        data-mask="##/##"
+                        required
+                      />
+                    </div>
                   </div>
-                  <div className="flex justify-between gap-8 mt-3">
-                    <input
-                      type="tel"
-                      name="expiry"
-                      id="expiry"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                      placeholder="MM/YY"
-                      data-mask="##/##"
+                  <div className="flex justify-between gap-4 mt-3">
+                    <select
+                      title="Select the credit card issuer"
+                      onChange={handleSelect}
                       required
-                    />
+                      id="issuer"
+                      name="issuer"
+                      className={`${
+                        issuer ? "text-gray-900" : "text-gray-500"
+                      } bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-500 dark:focus:border-cyan-500`}
+                    >
+                      <option disabled selected value="">
+                        Card issuer
+                      </option>
+                      <option value="visa">Visa</option>
+                      <option value="master">MasterCard</option>
+                      <option value="amex">American Express</option>
+                      <option value="diners">Diners Club</option>
+                    </select>
                     <input
                       type="tel"
                       name="cvv"
                       id="cvv"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-24 p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                       placeholder="CVV"
                       required
                     />
@@ -243,7 +275,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                         id="remember"
                         type="checkbox"
                         value=""
-                        className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
+                        className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-cyan-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-cyan-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
                         required
                       />
                     </div>
@@ -273,7 +305,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                 )}
                 <button
                   type="submit"
-                  className="relative w-full text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800 disabled:bg-gray-600"
+                  className="relative w-full text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800 disabled:bg-gray-600"
                   disabled={loading}
                 >
                   {loading && (

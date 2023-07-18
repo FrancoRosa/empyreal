@@ -33,6 +33,7 @@ a {
 }
 
 textarea,
+select,
 input {
   outline: none;
 }

@@ -164,6 +164,21 @@ const products = [
     price_hidden: false,
     link: "http://www.ongov.net/911/documents/latitude-rugged-extreme-tablet-ecosystem-guidenew.pdf",
   },
+  {
+    id: 12,
+    name: {
+      en: "Correction stream (1hr).",
+      es: "Transmisión de corrección (1hr)",
+    },
+    description: {
+      en: "RTCM3 correction data 24/7 to get centimeter level accuracy, 12 month subscription. The RTCM correction data will be provided to the client as long as there is internet connection availabe on their devices. The client must send an message with his device ID to enable his stream.",
+      es: "Datos de corrección RTCM3 24/7 subscripcion de 12 meses.",
+    },
+    price: 1,
+    image: "stream",
+    price_hidden: false,
+    link: "http://www.euref.eu/symposia/2018Amsterdam/03-02-Soehne.pdf",
+  },
 ];
 
 export default products;

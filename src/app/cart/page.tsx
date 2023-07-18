@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 import { AiFillMinusCircle, AiFillPlusCircle } from "react-icons/ai";
 import { BsFillTrashFill } from "react-icons/bs";
 
+const shipping = 1.5;
+
 const text: any = {
   checkout: {
     en: "Checkout",
@@ -182,11 +184,13 @@ export default function Cart() {
               </tr>
               <tr>
                 <td>{text.shipping[lang]}</td>
-                <td className="pl-8 text-right">{monetize(15)}</td>
+                <td className="pl-8 text-right">{monetize(shipping)}</td>
               </tr>
               <tr className="font-semibold">
                 <td>Total:</td>
-                <td className="pl-8 text-right">{monetize(total + 15)}</td>
+                <td className="pl-8 text-right">
+                  {monetize(total + shipping)}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -201,7 +205,7 @@ export default function Cart() {
           {checkout && (
             <Checkout
               setCheckout={setCheckout}
-              value={total + 15}
+              value={total + shipping}
               list={list}
             />
           )}
