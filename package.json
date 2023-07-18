@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.4.0",
-    "@mercadopago/sdk-react": "^0.0.12",
     "@supabase/supabase-js": "^2.26.0",
     "@types/node": "20.3.3",
     "@types/react": "18.2.14",
