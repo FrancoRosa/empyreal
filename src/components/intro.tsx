@@ -20,7 +20,7 @@ const text: any = {
   },
   boards: {
     en: "Development boards",
-    es: "Targetas de desarrollo",
+    es: "Tarjetas de desarrollo",
   },
   antennas: {
     en: "Antennas and accessories",

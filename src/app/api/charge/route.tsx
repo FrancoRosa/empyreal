@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       }
     );
     const { id, metadata } = token_result.data;
-
+    console.log({ id });
     const options = {
       method: "POST",
       url: "https://api.culqi.com/v2/charges",
