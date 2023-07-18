@@ -17,7 +17,7 @@ const initialization = {
   amount: 100,
 };
 
-const onSubmit = async (formData) => {
+const onSubmit = async (formData: any) => {
   // callback llamado al hacer clic en el botón enviar datos
   // return new Promise((resolve, reject) => {
   //   fetch('/process_payment', {
@@ -40,7 +40,7 @@ const onSubmit = async (formData) => {
   console.log("SUMMITED");
 };
 
-const onError = async (error) => {
+const onError = async (error: any) => {
   // callback llamado para todos los casos de error de Brick
   console.log("ERROR");
 
