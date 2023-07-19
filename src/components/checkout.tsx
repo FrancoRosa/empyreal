@@ -19,6 +19,7 @@ const text: any = {
   name: { en: "Name", es: "Nombre" },
   client: { en: "Costumer name", es: "Nombre del cliente" },
   email: { en: "Email", es: "Email" },
+  user_id: { en: "Identification (Id)", es: "Itentificacion (Id)" },
   address: { en: "Address", es: "Direccion" },
   phone: { en: "Phone", es: "Telefono" },
   city: { en: "City", es: "Ciudad" },
@@ -48,7 +49,7 @@ const Checkout: React.FC<CheckoutProps> = ({
     setError1("");
     setError2("");
 
-    // setLoading(true);
+    setLoading(true);
 
     const {
       name: { value: name },
@@ -61,6 +62,7 @@ const Checkout: React.FC<CheckoutProps> = ({
       expiry: { value: expiry },
       cvv: { value: cvv },
       issuer: { value: issuer },
+      user_id: { value: user_id },
     } = e.target.elements;
 
     axios
@@ -76,23 +78,33 @@ const Checkout: React.FC<CheckoutProps> = ({
         expiry,
         cvv,
         issuer,
+        user_id,
         list,
       })
       .then((res) => {
-        // setLoading(false);
-        // if (res.data.object === "error") {
-        //   setError1(res.data.merchant_message);
-        //   setError2(res.data.user_message);
-        // } else {
-        //   //TODO: Send sucessfull order to DB
-
-        //   setMsg1(res.data.merchant_message);
-        //   setMsg2(res.data.user_message);
-        //   setTimeout(() => {
-        //     setSuccess(true);
-        //   }, 5000);
-        // }
+        console.log("_________________________________");
+        console.log(res.data);
+        console.log("_________________________________");
+        setLoading(false);
+        if ("error" in res.data) {
+          const { message, cause } = res.data;
+          setError1(message);
+          setError2(JSON.stringify(cause, null, 2));
+        } else {
+          //TODO: Send sucessfull order to DB
+          const { status, status_detail, currency_id, fee_details } = res.data;
+          setMsg1(status);
+          setMsg2(
+            JSON.stringify({ status_detail, currency_id, fee_details }, null, 2)
+          );
+          // setTimeout(() => {
+          //   setSuccess(true);
+          // }, 5000);
+        }
         console.log(res);
+      })
+      .catch(() => {
+        setLoading(false);
       });
   };
 
@@ -155,19 +167,35 @@ const Checkout: React.FC<CheckoutProps> = ({
                     required
                   />
                 </div>
-                <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    {text.email[lang]}
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                    placeholder="name@company.com"
-                    required
-                  />
+                <div className="flex gap-4">
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      {text.user_id[lang]}
+                    </label>
+                    <input
+                      type="tel"
+                      name="user_id"
+                      id="user_id"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                      placeholder="12345678"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      {text.email[lang]}
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      id="email"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                      placeholder="name@company.com"
+                      required
+                    />
+                  </div>
                 </div>
+
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     {text.phone[lang]}
@@ -295,13 +323,19 @@ const Checkout: React.FC<CheckoutProps> = ({
                   <p className="text-sm text-red-800 text-center">{error1}</p>
                 )}
                 {error2 && (
-                  <p className="text-sm text-red-800 text-center">{error2}</p>
+                  <pre className="text-xs text-red-800 overflow-scroll">
+                    {error2}
+                  </pre>
                 )}
                 {msg1 && (
-                  <p className="text-sm text-green-800 text-center">{msg1}</p>
+                  <p className="text-sm text-green-800 text-center capitalize">
+                    {msg1}
+                  </p>
                 )}
                 {msg2 && (
-                  <p className="text-sm text-green-800 text-center">{msg2}</p>
+                  <pre className="text-xs text-green-800 overflow-scroll">
+                    {msg2}
+                  </pre>
                 )}
                 <button
                   type="submit"
