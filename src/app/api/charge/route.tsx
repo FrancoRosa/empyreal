@@ -1,5 +1,3 @@
-// import { setDBOrder } from "@/js/supabase";
-
 const axios = require("axios");
 const acc_token = process.env.ACC_TKN;
 

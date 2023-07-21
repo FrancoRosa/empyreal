@@ -1,6 +1,4 @@
 import { createClient } from "@supabase/supabase-js";
-
-// Create a single supabase client for interacting with your database
 const supabase = createClient(process.env.SUP_URL, process.env.SUP_ANN);
 
 export const setDBOrder = async (
@@ -15,4 +13,8 @@ export const setDBOrder = async (
   return await supabase
     .from("orders")
     .insert({ value, name, address, postal, city, email, order });
+};
+
+export const getProducts = async () => {
+  return await supabase.from("products").select("*");
 };
