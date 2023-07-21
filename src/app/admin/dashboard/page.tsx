@@ -93,7 +93,7 @@ export default function Admin() {
                       <tr>
                         <td className="py-6" colSpan={6}>
                           <h3 className="text-center">{targetProd.name_en}</h3>
-                          <div className="flex justify-around">
+                          <div className="flex justify-around w-60">
                             <button className="hover:bg-cyan-700 bg-cyan-500 text-white px-4 py-2 rounded-lg w-28">
                               Save
                             </button>
