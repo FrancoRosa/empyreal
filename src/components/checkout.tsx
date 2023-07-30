@@ -4,7 +4,7 @@ import { getLang, monetize } from "@/js/helpers";
 import Brand from "./brand";
 import Link from "next/link";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiLoaderAlt } from "react-icons/bi";
 import { setTimeout } from "timers";
 
@@ -17,6 +17,8 @@ interface CheckoutProps {
 const text: any = {
   payment: { en: "Payment success", es: "El pago fue realizado con exito" },
   name: { en: "Name", es: "Nombre" },
+  fname: { en: "First name", es: "Nombre" },
+  lname: { en: "Last name", es: "Apellido" },
   client: { en: "Costumer name", es: "Nombre del cliente" },
   email: { en: "Email", es: "Email" },
   user_id: { en: "Identification (Id)", es: "Itentificacion (Id)" },
@@ -36,82 +38,297 @@ const Checkout: React.FC<CheckoutProps> = ({
   list,
 }) => {
   const [loading, setLoading] = useState(false);
+  const [formLoad, setFormLoad] = useState(true);
   const [error1, setError1] = useState("");
   const [error2, setError2] = useState("");
   const [msg1, setMsg1] = useState("");
   const [msg2, setMsg2] = useState("");
   const [success, setSuccess] = useState<boolean>(false);
-  const [issuer, setIssuer] = useState<boolean>(false);
+  const [session, setSession] = useState({});
   const lang = getLang();
+  const [loadJS, setLoadJS] = useState(false);
+  const [cardOK, setCardOK] = useState(false);
 
   const handlePayment = (e: any) => {
     e.preventDefault();
-    setError1("");
-    setError2("");
+    console.log(cardOK);
 
-    setLoading(true);
+    // setError1("");
+    // setError2("");
 
-    const {
-      name: { value: name },
-      email: { value: email },
-      phone: { value: phone },
-      address: { value: address },
-      postal: { value: postal },
-      city: { value: city },
-      card: { value: card },
-      expiry: { value: expiry },
-      cvv: { value: cvv },
-      issuer: { value: issuer },
-      user_id: { value: user_id },
-    } = e.target.elements;
+    // setLoading(true);
 
-    axios
-      .post("/api/charge", {
-        value,
-        name,
-        email,
-        phone,
-        address,
-        postal,
-        city,
-        card,
-        expiry,
-        cvv,
-        issuer,
-        user_id,
-        list,
-      })
-      .then((res) => {
-        console.log("_________________________________");
-        console.log(res.data);
-        console.log("_________________________________");
-        setLoading(false);
-        if ("error" in res.data) {
-          const { message, cause } = res.data;
-          setError1(message);
-          setError2(JSON.stringify(cause, null, 2));
-        } else {
-          //TODO: Send sucessfull order to DB
-          const { status, status_detail, currency_id, fee_details } = res.data;
-          setMsg1(status);
-          setMsg2(
-            JSON.stringify({ status_detail, currency_id, fee_details }, null, 2)
-          );
-          // setTimeout(() => {
-          //   setSuccess(true);
-          // }, 5000);
-        }
-        console.log(res);
-      })
-      .catch(() => {
-        setLoading(false);
+    // const {
+    //   fname: { value: fname },
+    //   lname: { value: lname },
+    //   email: { value: email },
+    //   phone: { value: phone },
+    //   address: { value: address },
+    //   postal: { value: postal },
+    //   city: { value: city },
+    //   user_id: { value: user_id },
+    // } = e.target.elements;
+    // console.log({
+    //   fname,
+    //   lname,
+    //   email,
+    //   phone,
+    //   address,
+    //   postal,
+    //   city,
+    //   user_id,
+    // });
+    // console.log({ list });
+    // setTimeout(() => {
+    //   setLoading(false);
+    // }, 1000);
+  };
+
+  useEffect(() => {
+    console.log({ cardOK });
+  }, [cardOK]);
+
+  useEffect(() => {
+    console.log("RENDERING CHECKOUT");
+
+    const lib = {
+      test: "https://pocpaymentserve.s3.amazonaws.com/payform.min.js",
+      prod: "https://static-content.vnforapps.com/elements/v1/payform.min.js",
+    };
+
+    if (window && document && !loadJS) {
+      window.amount = value.toFixed(2);
+      window.channel = "web";
+      window.purchase = "123456789";
+      window.dcc = false;
+
+      console.log("inject script");
+
+      const script = document.createElement("script");
+      const body = document.getElementsByTagName("body")[0];
+      script.src = lib.test;
+      body.appendChild(script);
+      script.addEventListener("load", () => {
+        console.log("..... LOADED JS");
       });
-  };
+      axios
+        .post("/api/session", { amount: value })
+        .then((res) => {
+          setSession(res.data);
+          setLoadJS(true);
+          console.log(res.data);
+          window.configuration = {
+            sessionkey: res.data.sessionKey,
+            channel: "web",
+            merchantid: 456879854,
+            purchasenumber: window.purchase,
+            amount: window.amount,
+            callbackurl: "",
+            language: "en",
+            // font: "https://fonts.googleapis.com/css?family=Montserrat:400&display=swap",
+            font: "https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap",
+          };
+          window.payform.setConfiguration(window.configuration);
 
-  const handleSelect = (e: any) => {
-    if (e.target.value === "") setIssuer(false);
-    else setIssuer(true);
-  };
+          const elementStyles = {
+            base: {
+              color: "black",
+              margin: "0",
+              // width: '100% !important',
+              // fontWeight: 700,
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "14px",
+              fontSmoothing: "antialiased",
+              placeholder: {
+                color: "#999999",
+              },
+              autofill: {
+                color: "#e39f48",
+              },
+            },
+            invalid: {
+              color: "#E25950",
+              "::placeholder": {
+                color: "#FFCCA5",
+              },
+            },
+          };
+          // Número de tarjeta
+          window.cardNumber = window.payform.createElement(
+            "card-number",
+            {
+              style: elementStyles,
+              placeholder: "XXXX XXXX XXXX XXXX",
+            },
+            "txtNumeroTarjeta"
+          );
+
+          window.cardNumber.then((element) => {
+            element.on("bin", function (data) {
+              console.log("BIN: ", data);
+            });
+
+            element.on("dcc", function (data) {
+              console.log("DCC", data);
+              if (data != null) {
+                var response = confirm(
+                  "Usted tiene la opción de pagar su factura en: PEN " +
+                    window.amount +
+                    " o " +
+                    data["currencyCodeAlpha"] +
+                    " " +
+                    data["amount"] +
+                    ". Una vez haya hecho su elección, la transacción continuará con la moneda seleccionada. Tasa de cambio PEN a " +
+                    data["currencyCodeAlpha"] +
+                    ": " +
+                    data["exchangeRate"] +
+                    " \n \n" +
+                    data["currencyCodeAlpha"] +
+                    " " +
+                    data["amount"] +
+                    "\nPEN = " +
+                    data["currencyCodeAlpha"] +
+                    " " +
+                    data["exchangeRate"] +
+                    "\nMARGEN FX: " +
+                    data["markup"]
+                );
+                if (response == true) {
+                  window.dcc = true;
+                } else {
+                  window.dcc = false;
+                }
+              }
+            });
+
+            element.on("installments", function (data) {
+              console.log("INSTALLMENTS: ", data);
+              if (data != null && window.channel == "web") {
+                window.credito = true;
+                var cuotas = document.getElementById("cuotas");
+                cuotas.style.display = "block";
+
+                var select = document.createElement("select");
+                select.setAttribute(
+                  "class",
+                  "form-control form-control-sm mb-4"
+                );
+                select.setAttribute("id", "selectCuotas");
+                optionDefault = document.createElement("option");
+                optionDefault.value = optionDefault.textContent = "Sin cuotas";
+                select.appendChild(optionDefault);
+                data.forEach(function (item) {
+                  option = document.createElement("option");
+                  option.value = option.textContent = item;
+                  select.appendChild(option);
+                });
+                cuotas.appendChild(select);
+              } else {
+                window.credito = false;
+                var cuotas = document.getElementById("selectCuotas");
+                if (cuotas != undefined) {
+                  cuotas.parentNode.removeChild(cuotas);
+                }
+              }
+            });
+
+            element.on("change", function (data) {
+              console.log("CHANGE CARD: ", data);
+              var cardText = document.getElementById("msjNroTarjeta");
+              var cardExp = document.getElementById("msjFechaVencimiento");
+              var cardCVV = document.getElementById("msjCvv");
+              var status = false;
+
+              const ccNum = document.getElementById("cc-number");
+              ccNum?.addEventListener("input", (e) => {
+                console.log("num:");
+                console.log(e.target?.value);
+              });
+              const ccExp = document.getElementById("cc-exp");
+              ccExp?.addEventListener("input", (e) => {
+                console.log("exp:");
+                console.log(e.target?.value);
+              });
+              const ccCvv = document.getElementById("cc-cvv");
+              ccCvv?.addEventListener("input", (e) => {
+                console.log("cvv:");
+                console.log(e.target?.value);
+              });
+
+              console.log("Cool", cardText.value, cardExp.value, cardCVV.value);
+
+              if (
+                cardText.value !== "" &&
+                cardExp.value !== "" &&
+                cardCVV.value !== ""
+              ) {
+                status = true;
+              } else {
+                status = false;
+              }
+              cardText.style.display = "none";
+              cardExp.style.display = "none";
+              document.getElementById("msjCvv").style.display = "none";
+              if (data.length != 0) {
+                status = false;
+                data.forEach(function (d) {
+                  if (d["code"] == "invalid_number") {
+                    cardText.style.display = "block";
+                    cardText.innerText = d["message"];
+                  }
+                  if (d["code"] == "invalid_expiry") {
+                    document.getElementById(
+                      "msjFechaVencimiento"
+                    ).style.display = "block";
+                    cardExp.innerText = d["message"];
+                  }
+                  if (d["code"] == "invalid_cvc") {
+                    cardCVV.style.display = "block";
+                    cardCVV.innerText = d["message"];
+                  }
+                });
+              }
+              setCardOK(status);
+            });
+          });
+
+          // Cvv2
+          window.cardCvv = payform.createElement(
+            "card-cvc",
+            {
+              style: elementStyles,
+              placeholder: "CVV",
+            },
+            "txtCvv"
+          );
+
+          window.cardCvv.then((element) => {
+            element.on("change", function (data) {
+              console.log("CHANGE CVV2: ", data);
+            });
+          });
+
+          // Fecha de vencimiento
+          window.cardExpiry = payform.createElement(
+            "card-expiry",
+            {
+              style: elementStyles,
+              placeholder: "MM/AAAA",
+            },
+            "txtFechaVencimiento"
+          );
+
+          window.cardExpiry.then((element) => {
+            element.on("change", function (data) {
+              console.log("CHANGE F.V: ", data);
+            });
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, []);
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-full justify-center items-center flex bg-cyan-800/70">
@@ -158,14 +375,24 @@ const Checkout: React.FC<CheckoutProps> = ({
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     {text.name[lang]}
                   </label>
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                    placeholder={text.client[lang]}
-                    required
-                  />
+                  <div className="flex gap-4">
+                    <input
+                      type="text"
+                      name="fname"
+                      id="fname"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                      placeholder={text.fname[lang]}
+                      required
+                    />
+                    <input
+                      type="text"
+                      name="lname"
+                      id="lname"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                      placeholder={text.lname[lang]}
+                      required
+                    />
+                  </div>
                 </div>
                 <div className="flex gap-4">
                   <div>
@@ -248,52 +475,40 @@ const Checkout: React.FC<CheckoutProps> = ({
                       {text.card[lang]}
                     </label>
                     <div className="flex justify-between gap-4 mt-3">
-                      <input
-                        type="card"
-                        name="card"
-                        id="card"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                        placeholder="#### #### #### ####"
-                        required
-                      />
-                      <input
-                        type="tel"
-                        name="expiry"
-                        id="expiry"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-24 p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                        placeholder="MM/YY"
-                        data-mask="##/##"
-                        required
-                      />
+                      <div>
+                        <div
+                          id="txtNumeroTarjeta"
+                          className="w-52 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                        ></div>
+
+                        <small
+                          id="msjNroTarjeta"
+                          className="text-xs text-red-700 border-solid border-2 border-red-400"
+                        ></small>
+                      </div>
+                      <div>
+                        <div
+                          id="txtFechaVencimiento"
+                          className="w-24 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block  p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                        ></div>
+
+                        <small
+                          id="msjFechaVencimiento"
+                          className="text-xs text-red-700"
+                        ></small>
+                      </div>
+                      <div>
+                        <div
+                          id="txtCvv"
+                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-16 p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                        ></div>
+
+                        <small
+                          id="msjCvv"
+                          className="text-xs text-red-700"
+                        ></small>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex justify-between gap-4 mt-3">
-                    <select
-                      title="Select the credit card issuer"
-                      onChange={handleSelect}
-                      required
-                      id="issuer"
-                      name="issuer"
-                      className={`${
-                        issuer ? "text-gray-900" : "text-gray-500"
-                      } bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-cyan-500 dark:focus:border-cyan-500`}
-                    >
-                      <option disabled selected value="">
-                        Card issuer
-                      </option>
-                      <option value="visa">Visa</option>
-                      <option value="master">MasterCard</option>
-                      <option value="amex">American Express</option>
-                      <option value="diners">Diners Club</option>
-                    </select>
-                    <input
-                      type="tel"
-                      name="cvv"
-                      id="cvv"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-24 p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                      placeholder="CVV"
-                      required
-                    />
                   </div>
                 </div>
                 <div className="flex justify-between">
@@ -340,7 +555,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                 <button
                   type="submit"
                   className="relative w-full text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800 disabled:bg-gray-600"
-                  disabled={loading}
+                  disabled={!cardOK || loading}
                 >
                   {loading && (
                     <BiLoaderAlt className="absolute bottom-2 animate-spin text-2xl" />
