@@ -1,18 +1,12 @@
+// @ts-nocheck
 "use client";
-
-import { getLang, monetize } from "@/js/helpers";
+import { formatDate, getLang, monetize } from "@/js/helpers";
 import Brand from "./brand";
 import Link from "next/link";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BiLoaderAlt } from "react-icons/bi";
-import { setTimeout } from "timers";
-
-interface CheckoutProps {
-  setCheckout: Function;
-  value?: number;
-  list: any;
-}
+import { useGlobalContext } from "@/context/store";
 
 const text: any = {
   payment: { en: "Payment success", es: "El pago fue realizado con exito" },
@@ -37,6 +31,8 @@ const Checkout: React.FC<CheckoutProps> = ({
   value = 0,
   list,
 }) => {
+  const { setCart } = useGlobalContext();
+
   const [loading, setLoading] = useState(false);
   const [formLoad, setFormLoad] = useState(true);
   const [error1, setError1] = useState("");
@@ -44,49 +40,105 @@ const Checkout: React.FC<CheckoutProps> = ({
   const [msg1, setMsg1] = useState("");
   const [msg2, setMsg2] = useState("");
   const [success, setSuccess] = useState<boolean>(false);
+  const [successPayload, setSuccessPayload] = useState({});
   const [session, setSession] = useState({});
-  const lang = getLang();
   const [loadJS, setLoadJS] = useState(false);
-  const [cardOK, setCardOK] = useState(false);
+  const lang = getLang();
 
   const handlePayment = (e: any) => {
     e.preventDefault();
-    console.log(cardOK);
 
-    // setError1("");
+    setError1("");
     // setError2("");
 
-    // setLoading(true);
+    setLoading(true);
 
-    // const {
-    //   fname: { value: fname },
-    //   lname: { value: lname },
-    //   email: { value: email },
-    //   phone: { value: phone },
-    //   address: { value: address },
-    //   postal: { value: postal },
-    //   city: { value: city },
-    //   user_id: { value: user_id },
-    // } = e.target.elements;
-    // console.log({
-    //   fname,
-    //   lname,
-    //   email,
-    //   phone,
-    //   address,
-    //   postal,
-    //   city,
-    //   user_id,
-    // });
+    const {
+      fname: { value: fname },
+      lname: { value: lname },
+      email: { value: email },
+      phone: { value: phone },
+      address: { value: address },
+      postal: { value: postal },
+      city: { value: city },
+      user_id: { value: user_id },
+    } = e.target.elements;
+    console.log({
+      fname,
+      lname,
+      email,
+      phone,
+      address,
+      postal,
+      city,
+      user_id,
+    });
+
+    const data = {
+      name: fname,
+      lastName: lname,
+      email,
+      alias: "KS",
+      phone,
+      currencyConversion: false,
+      recurrence: false,
+    };
+
+    console.log(window.cardNumber, window.cardExpiry, window.cardCvv);
+    window.payform
+      .createToken([window.cardNumber, window.cardExpiry, window.cardCvv], data)
+      .then((data) => {
+        console.log("data token:", data);
+        console.log(
+          "BIN: " +
+            data.bin +
+            "\ntransactionToken: " +
+            data.transactionToken +
+            "\nchannel: " +
+            data.channel
+        );
+        axios
+          .post("/api/authorization", {
+            transactionToken: data.transactionToken,
+            amount: value,
+            purchase: window.purchase,
+          })
+          .then((res) => {
+            console.log("auth response");
+            console.log(res.data);
+            if ("fulfillment" in res.data) {
+              setSuccessPayload({
+                status: res.data.dataMap.STATUS,
+                orderNum: window.purchase,
+                fname,
+                lname,
+                date: res.data.dataMap.TRANSACTION_DATE,
+                amount: res.data.dataMap.AMOUNT,
+                currency: res.data.order.currency,
+                order: list,
+                card: res.data.dataMap.CARD,
+                brand: res.data.dataMap.BRAND,
+              });
+              // setCart([]);
+              setSuccess(true);
+            }
+            setLoading(false);
+          })
+          .catch((res) => {
+            console.log(res.data);
+            setLoading(false);
+          });
+      })
+      .catch((res) => {
+        console.log(res);
+        setError1(res);
+        setLoading(false);
+      });
     // console.log({ list });
     // setTimeout(() => {
     //   setLoading(false);
     // }, 1000);
   };
-
-  useEffect(() => {
-    console.log({ cardOK });
-  }, [cardOK]);
 
   useEffect(() => {
     console.log("RENDERING CHECKOUT");
@@ -101,7 +153,6 @@ const Checkout: React.FC<CheckoutProps> = ({
       window.channel = "web";
       window.purchase = "123456789";
       window.dcc = false;
-
       console.log("inject script");
 
       const script = document.createElement("script");
@@ -125,7 +176,6 @@ const Checkout: React.FC<CheckoutProps> = ({
             amount: window.amount,
             callbackurl: "",
             language: "en",
-            // font: "https://fonts.googleapis.com/css?family=Montserrat:400&display=swap",
             font: "https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap",
           };
           window.payform.setConfiguration(window.configuration);
@@ -164,122 +214,96 @@ const Checkout: React.FC<CheckoutProps> = ({
           );
 
           window.cardNumber.then((element) => {
-            element.on("bin", function (data) {
+            console.log("... form loaded");
+
+            setFormLoad(false);
+
+            element.on("bin", function (data: any) {
               console.log("BIN: ", data);
             });
 
-            element.on("dcc", function (data) {
-              console.log("DCC", data);
-              if (data != null) {
-                var response = confirm(
-                  "Usted tiene la opción de pagar su factura en: PEN " +
-                    window.amount +
-                    " o " +
-                    data["currencyCodeAlpha"] +
-                    " " +
-                    data["amount"] +
-                    ". Una vez haya hecho su elección, la transacción continuará con la moneda seleccionada. Tasa de cambio PEN a " +
-                    data["currencyCodeAlpha"] +
-                    ": " +
-                    data["exchangeRate"] +
-                    " \n \n" +
-                    data["currencyCodeAlpha"] +
-                    " " +
-                    data["amount"] +
-                    "\nPEN = " +
-                    data["currencyCodeAlpha"] +
-                    " " +
-                    data["exchangeRate"] +
-                    "\nMARGEN FX: " +
-                    data["markup"]
-                );
-                if (response == true) {
-                  window.dcc = true;
-                } else {
-                  window.dcc = false;
-                }
-              }
-            });
+            // element.on("dcc", function (data: any) {
+            //   console.log("DCC", data);
+            //   if (data != null) {
+            //     var response = confirm(
+            //       "Usted tiene la opción de pagar su factura en: PEN " +
+            //         window.amount +
+            //         " o " +
+            //         data["currencyCodeAlpha"] +
+            //         " " +
+            //         data["amount"] +
+            //         ". Una vez haya hecho su elección, la transacción continuará con la moneda seleccionada. Tasa de cambio PEN a " +
+            //         data["currencyCodeAlpha"] +
+            //         ": " +
+            //         data["exchangeRate"] +
+            //         " \n \n" +
+            //         data["currencyCodeAlpha"] +
+            //         " " +
+            //         data["amount"] +
+            //         "\nPEN = " +
+            //         data["currencyCodeAlpha"] +
+            //         " " +
+            //         data["exchangeRate"] +
+            //         "\nMARGEN FX: " +
+            //         data["markup"]
+            //     );
+            //     if (response == true) {
+            //       window.dcc = true;
+            //     } else {
+            //       window.dcc = false;
+            //     }
+            //   }
+            // });
 
-            element.on("installments", function (data) {
-              console.log("INSTALLMENTS: ", data);
-              if (data != null && window.channel == "web") {
-                window.credito = true;
-                var cuotas = document.getElementById("cuotas");
-                cuotas.style.display = "block";
+            // element.on("installments", function (data: any) {
+            //   console.log("INSTALLMENTS: ", data);
+            //   if (data != null && window.channel == "web") {
+            //     window.credito = true;
+            //     var cuotas = document.getElementById("cuotas");
+            //     cuotas.style.display = "block";
 
-                var select = document.createElement("select");
-                select.setAttribute(
-                  "class",
-                  "form-control form-control-sm mb-4"
-                );
-                select.setAttribute("id", "selectCuotas");
-                optionDefault = document.createElement("option");
-                optionDefault.value = optionDefault.textContent = "Sin cuotas";
-                select.appendChild(optionDefault);
-                data.forEach(function (item) {
-                  option = document.createElement("option");
-                  option.value = option.textContent = item;
-                  select.appendChild(option);
-                });
-                cuotas.appendChild(select);
-              } else {
-                window.credito = false;
-                var cuotas = document.getElementById("selectCuotas");
-                if (cuotas != undefined) {
-                  cuotas.parentNode.removeChild(cuotas);
-                }
-              }
-            });
+            //     var select = document.createElement("select");
+            //     select.setAttribute(
+            //       "class",
+            //       "form-control form-control-sm mb-4"
+            //     );
+            //     select.setAttribute("id", "selectCuotas");
+            //     optionDefault = document.createElement("option");
+            //     optionDefault.value = optionDefault.textContent = "Sin cuotas";
+            //     select.appendChild(optionDefault);
+            //     data.forEach(function (item) {
+            //       option = document.createElement("option");
+            //       option.value = option.textContent = item;
+            //       select.appendChild(option);
+            //     });
+            //     cuotas.appendChild(select);
+            //   } else {
+            //     window.credito = false;
+            //     var cuotas = document.getElementById("selectCuotas");
+            //     if (cuotas != undefined) {
+            //       cuotas.parentNode.removeChild(cuotas);
+            //     }
+            //   }
+            // });
 
             element.on("change", function (data) {
               console.log("CHANGE CARD: ", data);
-              var cardText = document.getElementById("msjNroTarjeta");
-              var cardExp = document.getElementById("msjFechaVencimiento");
-              var cardCVV = document.getElementById("msjCvv");
-              var status = false;
-
-              const ccNum = document.getElementById("cc-number");
-              ccNum?.addEventListener("input", (e) => {
-                console.log("num:");
-                console.log(e.target?.value);
-              });
-              const ccExp = document.getElementById("cc-exp");
-              ccExp?.addEventListener("input", (e) => {
-                console.log("exp:");
-                console.log(e.target?.value);
-              });
-              const ccCvv = document.getElementById("cc-cvv");
-              ccCvv?.addEventListener("input", (e) => {
-                console.log("cvv:");
-                console.log(e.target?.value);
-              });
-
-              console.log("Cool", cardText.value, cardExp.value, cardCVV.value);
-
-              if (
-                cardText.value !== "" &&
-                cardExp.value !== "" &&
-                cardCVV.value !== ""
-              ) {
-                status = true;
-              } else {
-                status = false;
-              }
-              cardText.style.display = "none";
-              cardExp.style.display = "none";
-              document.getElementById("msjCvv").style.display = "none";
+              const cardText: any = document.getElementById("msjNroTarjeta");
+              const cardExp: any = document.getElementById(
+                "msjFechaVencimiento"
+              );
+              const cardCVV: any = document.getElementById("msjCvv");
+              cardText.innerText = "";
+              cardExp.innerText = "";
+              cardCVV.innerText = "";
               if (data.length != 0) {
-                status = false;
                 data.forEach(function (d) {
                   if (d["code"] == "invalid_number") {
                     cardText.style.display = "block";
                     cardText.innerText = d["message"];
                   }
                   if (d["code"] == "invalid_expiry") {
-                    document.getElementById(
-                      "msjFechaVencimiento"
-                    ).style.display = "block";
+                    cardExp.style.display = "block";
                     cardExp.innerText = d["message"];
                   }
                   if (d["code"] == "invalid_cvc") {
@@ -288,7 +312,6 @@ const Checkout: React.FC<CheckoutProps> = ({
                   }
                 });
               }
-              setCardOK(status);
             });
           });
 
@@ -302,13 +325,6 @@ const Checkout: React.FC<CheckoutProps> = ({
             "txtCvv"
           );
 
-          window.cardCvv.then((element) => {
-            element.on("change", function (data) {
-              console.log("CHANGE CVV2: ", data);
-            });
-          });
-
-          // Fecha de vencimiento
           window.cardExpiry = payform.createElement(
             "card-expiry",
             {
@@ -317,12 +333,6 @@ const Checkout: React.FC<CheckoutProps> = ({
             },
             "txtFechaVencimiento"
           );
-
-          window.cardExpiry.then((element) => {
-            element.on("change", function (data) {
-              console.log("CHANGE F.V: ", data);
-            });
-          });
         })
         .catch((err) => {
           console.log(err);
@@ -368,15 +378,119 @@ const Checkout: React.FC<CheckoutProps> = ({
               )}
             </div>
             {success ? (
-              <p className="text-center">{text.payment[lang]}</p>
+              <>
+                <p className="text-center py-4">{text.payment[lang]}</p>
+                <div className="relative overflow-x-auto">
+                  <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <tbody>
+                      <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th
+                          scope="row"
+                          className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
+                          Status
+                        </th>
+                        <td className="px-6 py-2">{successPayload.status}</td>
+                      </tr>
+                      <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th
+                          scope="row"
+                          className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
+                          Order number
+                        </th>
+                        <td className="px-6 py-2">{successPayload.orderNum}</td>
+                      </tr>
+
+                      <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th
+                          scope="row"
+                          className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
+                          Client
+                        </th>
+                        <td className="px-6 py-2">
+                          {successPayload.fname} {successPayload.lname}
+                        </td>
+                      </tr>
+                      <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th
+                          scope="row"
+                          className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
+                          Date
+                        </th>
+                        <td className="px-6 py-2">
+                          {formatDate(successPayload.date)}
+                        </td>
+                      </tr>
+
+                      <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th
+                          scope="row"
+                          className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
+                          Order details
+                        </th>
+                        <td className="px-6 py-2">
+                          <table>
+                            <thead>
+                              <th>Item</th>
+                              <th>Qty.</th>
+                            </thead>
+                            <tbody>
+                              {successPayload.order.map((m, index) => (
+                                <tr key={index}>
+                                  <td>{m.name[lang]}</td>
+                                  <td className="text-right">{m.quantity}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+                      <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th
+                          scope="row"
+                          className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
+                          Amount
+                        </th>
+                        <td className="px-6 py-2">
+                          {successPayload.amount} {successPayload.currency}
+                        </td>
+                      </tr>
+                      <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th
+                          scope="row"
+                          className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
+                          Card
+                        </th>
+                        <td className="px-6 py-2">
+                          {successPayload.card}{" "}
+                          <span className="capitalize">
+                            ({successPayload.brand})
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </>
             ) : (
-              <form className="space-y-6" action="#" onSubmit={handlePayment}>
+              <form
+                className={`space-y-6 ${formLoad && "hidden"}`}
+                action="#"
+                onSubmit={handlePayment}
+              >
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     {text.name[lang]}
                   </label>
                   <div className="flex gap-4">
                     <input
+                      value="Franco"
                       type="text"
                       name="fname"
                       id="fname"
@@ -385,6 +499,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                       required
                     />
                     <input
+                      value="Rosa"
                       type="text"
                       name="lname"
                       id="lname"
@@ -400,6 +515,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                       {text.user_id[lang]}
                     </label>
                     <input
+                      value="44216700"
                       type="tel"
                       name="user_id"
                       id="user_id"
@@ -413,6 +529,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                       {text.email[lang]}
                     </label>
                     <input
+                      value="km115.franco@gmail.com"
                       type="email"
                       name="email"
                       id="email"
@@ -428,6 +545,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                     {text.phone[lang]}
                   </label>
                   <input
+                    value="987654321"
                     type="tel"
                     name="phone"
                     id="phone"
@@ -442,6 +560,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                       {text.address[lang]}
                     </label>
                     <input
+                      value="Urb. Kennedy B C-2"
                       type="tel"
                       name="address"
                       id="address"
@@ -452,6 +571,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                   </div>
                   <div className="flex justify-between gap-8 mt-4">
                     <input
+                      value="Cusco"
                       type="tel"
                       name="city"
                       id="city"
@@ -460,6 +580,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                       required
                     />
                     <input
+                      value="08002"
                       type="tel"
                       name="postal"
                       id="postal"
@@ -483,7 +604,7 @@ const Checkout: React.FC<CheckoutProps> = ({
 
                         <small
                           id="msjNroTarjeta"
-                          className="text-xs text-red-700 border-solid border-2 border-red-400"
+                          className="text-xs text-red-700"
                         ></small>
                       </div>
                       <div>
@@ -500,7 +621,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                       <div>
                         <div
                           id="txtCvv"
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-16 p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                          className="overflow-hidden bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-16 p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                         ></div>
 
                         <small
@@ -555,7 +676,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                 <button
                   type="submit"
                   className="relative w-full text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800 disabled:bg-gray-600"
-                  disabled={!cardOK || loading}
+                  disabled={loading}
                 >
                   {loading && (
                     <BiLoaderAlt className="absolute bottom-2 animate-spin text-2xl" />
@@ -563,6 +684,11 @@ const Checkout: React.FC<CheckoutProps> = ({
                   {text.pay[lang]}
                 </button>
               </form>
+            )}
+            {formLoad && (
+              <div className="flex justify-center">
+                <BiLoaderAlt className="animate-spin text-2xl text-center" />
+              </div>
             )}
           </div>
         </div>

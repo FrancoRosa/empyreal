@@ -56,7 +56,7 @@ const getSessionToken = async (accessToken, amount, ip) => {
 
 const getAuthorizationToken = async (
   amount,
-  purchaseNum,
+  purchaseNumber,
   transactionToken,
   accessToken
 ) => {
@@ -75,13 +75,12 @@ const getAuthorizationToken = async (
     order: {
       amount,
       currency: "USD",
-      purchaseNum,
+      purchaseNumber,
       tokenId: transactionToken,
     },
     recurrence: null,
     sponsored: null,
   };
-  console.log({ data });
   return await axios.post(url, data, options);
 };
 
