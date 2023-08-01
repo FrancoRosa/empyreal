@@ -26,3 +26,25 @@ export const formatDate = (input: string) => {
 
   return formattedDate;
 };
+
+export const toMinSec = (ms: number) => {
+  if (ms > 0) {
+    const seconds = Math.round(ms / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+
+    const formattedMinutes = String(minutes).padStart(2, "0");
+    const formattedSeconds = String(remainingSeconds).padStart(2, "0");
+
+    return `${formattedMinutes}:${formattedSeconds}`;
+  } else return "00:00";
+};
+
+export const isValidEmail = (email: string) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+export const getPurchaseNum = () => {
+  return Math.floor(10000 + Math.random() * 90000);
+};

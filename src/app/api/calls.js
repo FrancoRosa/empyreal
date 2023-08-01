@@ -29,7 +29,13 @@ const getAccessToken = async () => {
   return axios.get(url, options);
 };
 
-const getSessionToken = async (accessToken, amount, ip) => {
+const getSessionToken = async (
+  accessToken,
+  amount,
+  email = "integraciones@necomplus.com",
+  id = "0171225",
+  ip
+) => {
   const url = urls("sessionToken") + "/" + merId;
   const options = {
     headers: {
@@ -42,10 +48,10 @@ const getSessionToken = async (accessToken, amount, ip) => {
     antifraud: {
       clientIp: ip,
       merchantDefineData: {
-        MDD4: "integraciones@necomplus.com",
+        MDD4: email,
         MDD21: 0,
-        MDD32: "0171225",
-        MDD75: "Registrado",
+        MDD32: id,
+        MDD75: "Invitado",
         MDD77: 1,
       },
     },
