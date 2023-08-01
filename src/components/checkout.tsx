@@ -613,7 +613,6 @@ const Checkout: React.FC<CheckoutProps> = ({
                   </label>
                   <div className="flex gap-4">
                     <input
-                      value="Franco"
                       type="text"
                       name="fname"
                       id="fname"
@@ -622,7 +621,6 @@ const Checkout: React.FC<CheckoutProps> = ({
                       required
                     />
                     <input
-                      value="Rosa"
                       type="text"
                       name="lname"
                       id="lname"
@@ -682,7 +680,6 @@ const Checkout: React.FC<CheckoutProps> = ({
                     {text.phone[lang]}
                   </label>
                   <input
-                    value="987654321"
                     type="tel"
                     name="phone"
                     id="phone"
@@ -697,7 +694,6 @@ const Checkout: React.FC<CheckoutProps> = ({
                       {text.address[lang]}
                     </label>
                     <input
-                      value="Urb. Kennedy B C-2"
                       type="tel"
                       name="address"
                       id="address"
@@ -717,7 +713,6 @@ const Checkout: React.FC<CheckoutProps> = ({
                       required
                     />
                     <input
-                      value="08002"
                       type="tel"
                       name="postal"
                       id="postal"
@@ -780,7 +775,6 @@ const Checkout: React.FC<CheckoutProps> = ({
                       <input
                         id="remember"
                         type="checkbox"
-                        value=""
                         className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-cyan-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-cyan-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
                         required
                       />
