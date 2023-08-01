@@ -704,7 +704,6 @@ const Checkout: React.FC<CheckoutProps> = ({
                   </div>
                   <div className="flex justify-between gap-8 mt-4">
                     <input
-                      value="Cusco"
                       type="tel"
                       name="city"
                       id="city"
