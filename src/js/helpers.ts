@@ -44,7 +44,3 @@ export const isValidEmail = (email: string) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
-
-export const getPurchaseNum = () => {
-  return Math.floor(10000 + Math.random() * 90000);
-};

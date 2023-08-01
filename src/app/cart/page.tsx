@@ -207,6 +207,7 @@ export default function Cart() {
               setCheckout={setCheckout}
               value={total + shipping}
               list={list}
+              setList={setList}
             />
           )}
         </>

@@ -3,10 +3,8 @@
 import {
   formatDate,
   getLang,
-  getPurchaseNum,
   isValidEmail,
   monetize,
-  purchaseNum,
   toMinSec,
 } from "@/js/helpers";
 import Brand from "./brand";
@@ -16,6 +14,7 @@ import { useEffect, useState } from "react";
 import { BiLoaderAlt } from "react-icons/bi";
 import { useGlobalContext } from "@/context/store";
 import { useRouter } from "next/navigation";
+import { getDBNum, setDBOrder } from "@/js/supabase";
 
 const text: any = {
   paymentSuccess: {
@@ -51,6 +50,7 @@ const Checkout: React.FC<CheckoutProps> = ({
   setCheckout,
   value = 0,
   list,
+  setList,
 }) => {
   const { setCart } = useGlobalContext();
   const route = useRouter();
@@ -67,10 +67,19 @@ const Checkout: React.FC<CheckoutProps> = ({
   const [time, setTime] = useState(0);
   const [remaining, setRemaining] = useState(0);
   const [form, setForm] = useState({ user_id: "", email: "" });
+  const [boxComplete, setBoxComplete] = useState(false);
+
+  const handleBlur = (e) => {
+    const { id, value } = e.target;
+    console.log({ id, value });
+    if (id === "email") {
+      console.log("set box complete");
+      setBoxComplete(isValidEmail(value));
+    }
+  };
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    console.log({ id, value });
     setForm((f) => ({ ...f, [id]: value }));
   };
 
@@ -115,6 +124,8 @@ const Checkout: React.FC<CheckoutProps> = ({
       recurrence: false,
     };
 
+    let paymentStatus;
+
     console.log(window.cardNumber, window.cardExpiry, window.cardCvv);
     window.payform
       .createToken([window.cardNumber, window.cardExpiry, window.cardCvv], data)
@@ -150,6 +161,10 @@ const Checkout: React.FC<CheckoutProps> = ({
                 card: res.data.dataMap.CARD,
                 brand: res.data.dataMap.BRAND,
               });
+              paymentStatus = {
+                success: true,
+                status: res.data.dataMap.STATUS,
+              };
               // setCart([]);
               setSuccess(true);
             }
@@ -159,9 +174,27 @@ const Checkout: React.FC<CheckoutProps> = ({
                 date: res.data.message.data.TRANSACTION_DATE,
                 description: res.data.message.data.ACTION_DESCRIPTION,
               });
+              paymentStatus = {
+                success: false,
+                status: res.data.message.data.ACTION_DESCRIPTION,
+              };
             }
             setLoading(false);
             setSuccess(true);
+            setDBOrder(
+              value,
+              `${fname} ${lname}`,
+              email,
+              phone,
+              address,
+              company,
+              postal,
+              city,
+              list,
+              paymentStatus.status,
+              paymentStatus.success,
+              window.purchase
+            );
           })
           .catch((res) => {
             console.log(res.data);
@@ -176,207 +209,219 @@ const Checkout: React.FC<CheckoutProps> = ({
   };
 
   useEffect(() => {
-    if (form.user_id.length > 1 && isValidEmail(form.email)) {
+    const getVISAForm = async () => {
       const lib = {
-        test: "https://pocpaymentserve.s3.amazonaws.com/payform.min.js",
-        prod: "https://static-content.vnforapps.com/elements/v1/payform.min.js",
+        testing: "https://pocpaymentserve.s3.amazonaws.com/payform.min.js",
+        production:
+          "https://static-content.vnforapps.com/elements/v1/payform.min.js",
       };
 
-      if (window && document && !loadJS) {
-        setFormLoad(true);
-        window.amount = value.toFixed(2);
-        window.channel = "web";
-        window.purchase = getPurchaseNum();
-        window.dcc = false;
-        console.log("inject script");
+      setFormLoad(true);
 
-        const script = document.createElement("script");
-        const body = document.getElementsByTagName("body")[0];
-        script.src = lib.test;
-        body.appendChild(script);
-        script.addEventListener("load", () => {
-          console.log("..... LOADED JS");
-        });
-        axios
-          .post("/api/session", { amount: value })
-          .then((res) => {
-            setSession(res.data);
-            setLoadJS(true);
-            console.log(res.data);
-            window.configuration = {
-              sessionkey: res.data.sessionKey,
-              channel: "web",
-              merchantid: 456879854,
-              purchasenumber: window.purchase,
-              amount: window.amount,
-              callbackurl: "",
-              language: "en",
-              font: "https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap",
-            };
-            window.payform.setConfiguration(window.configuration);
+      window.amount = value.toFixed(2);
+      window.channel = "web";
+      try {
+        const { data } = await getDBNum();
+        window.purchase = data[0].id + 1;
+      } catch (error) {
+        window.purchase = 100000;
+      }
 
-            const elementStyles = {
-              base: {
-                color: "black",
-                margin: "0",
-                // width: '100% !important',
-                // fontWeight: 700,
-                fontFamily: "'Inter', sans-serif",
-                fontSize: "14px",
-                fontSmoothing: "antialiased",
-                placeholder: {
-                  color: "#999999",
-                },
-                autofill: {
-                  color: "#e39f48",
-                },
+      window.dcc = false;
+      console.log("inject script");
+
+      const script = document.createElement("script");
+      const body = document.getElementsByTagName("body")[0];
+      script.src = lib[process.env.VISA_ENV];
+      body.appendChild(script);
+      script.addEventListener("load", () => {
+        console.log("..... LOADED JS");
+      });
+      axios
+        .post("/api/session", { amount: value })
+        .then((res) => {
+          setSession(res.data);
+          setLoadJS(true);
+          console.log(res.data);
+          window.configuration = {
+            sessionkey: res.data.sessionKey,
+            channel: "web",
+            merchantid: process.env.VISA_COM,
+            purchasenumber: window.purchase,
+            amount: window.amount,
+            callbackurl: "",
+            language: "en",
+            font: "https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap",
+          };
+          window.payform.setConfiguration(window.configuration);
+
+          const elementStyles = {
+            base: {
+              color: "black",
+              margin: "0",
+              // width: '100% !important',
+              // fontWeight: 700,
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "14px",
+              fontSmoothing: "antialiased",
+              placeholder: {
+                color: "#999999",
               },
-              invalid: {
-                color: "#E25950",
-                "::placeholder": {
-                  color: "#FFCCA5",
-                },
+              autofill: {
+                color: "#e39f48",
               },
-            };
-            // Número de tarjeta
-            window.cardNumber = window.payform.createElement(
-              "card-number",
-              {
-                style: elementStyles,
-                placeholder: "XXXX XXXX XXXX XXXX",
+            },
+            invalid: {
+              color: "#E25950",
+              "::placeholder": {
+                color: "#FFCCA5",
               },
-              "txtNumeroTarjeta"
-            );
+            },
+          };
+          // Número de tarjeta
+          window.cardNumber = window.payform.createElement(
+            "card-number",
+            {
+              style: elementStyles,
+              placeholder: "XXXX XXXX XXXX XXXX",
+            },
+            "txtNumeroTarjeta"
+          );
 
-            window.cardNumber.then((element) => {
-              console.log("... form loaded");
+          window.cardNumber.then((element) => {
+            console.log("... form loaded");
 
-              setFormLoad(false);
+            setFormLoad(false);
 
-              element.on("bin", function (data: any) {
-                console.log("BIN: ", data);
-              });
-
-              // element.on("dcc", function (data: any) {
-              //   console.log("DCC", data);
-              //   if (data != null) {
-              //     var response = confirm(
-              //       "Usted tiene la opción de pagar su factura en: PEN " +
-              //         window.amount +
-              //         " o " +
-              //         data["currencyCodeAlpha"] +
-              //         " " +
-              //         data["amount"] +
-              //         ". Una vez haya hecho su elección, la transacción continuará con la moneda seleccionada. Tasa de cambio PEN a " +
-              //         data["currencyCodeAlpha"] +
-              //         ": " +
-              //         data["exchangeRate"] +
-              //         " \n \n" +
-              //         data["currencyCodeAlpha"] +
-              //         " " +
-              //         data["amount"] +
-              //         "\nPEN = " +
-              //         data["currencyCodeAlpha"] +
-              //         " " +
-              //         data["exchangeRate"] +
-              //         "\nMARGEN FX: " +
-              //         data["markup"]
-              //     );
-              //     if (response == true) {
-              //       window.dcc = true;
-              //     } else {
-              //       window.dcc = false;
-              //     }
-              //   }
-              // });
-
-              // element.on("installments", function (data: any) {
-              //   console.log("INSTALLMENTS: ", data);
-              //   if (data != null && window.channel == "web") {
-              //     window.credito = true;
-              //     var cuotas = document.getElementById("cuotas");
-              //     cuotas.style.display = "block";
-
-              //     var select = document.createElement("select");
-              //     select.setAttribute(
-              //       "class",
-              //       "form-control form-control-sm mb-4"
-              //     );
-              //     select.setAttribute("id", "selectCuotas");
-              //     optionDefault = document.createElement("option");
-              //     optionDefault.value = optionDefault.textContent = "Sin cuotas";
-              //     select.appendChild(optionDefault);
-              //     data.forEach(function (item) {
-              //       option = document.createElement("option");
-              //       option.value = option.textContent = item;
-              //       select.appendChild(option);
-              //     });
-              //     cuotas.appendChild(select);
-              //   } else {
-              //     window.credito = false;
-              //     var cuotas = document.getElementById("selectCuotas");
-              //     if (cuotas != undefined) {
-              //       cuotas.parentNode.removeChild(cuotas);
-              //     }
-              //   }
-              // });
-
-              element.on("change", function (data) {
-                console.log("CHANGE CARD: ", data);
-                const cardText: any = document.getElementById("msjNroTarjeta");
-                const cardExp: any = document.getElementById(
-                  "msjFechaVencimiento"
-                );
-                const cardCVV: any = document.getElementById("msjCvv");
-                cardText.innerText = "";
-                cardExp.innerText = "";
-                cardCVV.innerText = "";
-                if (data.length != 0) {
-                  data.forEach(function (d) {
-                    if (d["code"] == "invalid_number") {
-                      cardText.style.display = "block";
-                      cardText.innerText = d["message"];
-                    }
-                    if (d["code"] == "invalid_expiry") {
-                      cardExp.style.display = "block";
-                      cardExp.innerText = d["message"];
-                    }
-                    if (d["code"] == "invalid_cvc") {
-                      cardCVV.style.display = "block";
-                      cardCVV.innerText = d["message"];
-                    }
-                  });
-                }
-              });
+            element.on("bin", function (data: any) {
+              console.log("BIN: ", data);
             });
 
-            // Cvv2
-            window.cardCvv = payform.createElement(
-              "card-cvc",
-              {
-                style: elementStyles,
-                placeholder: "CVV",
-              },
-              "txtCvv"
-            );
+            // element.on("dcc", function (data: any) {
+            //   console.log("DCC", data);
+            //   if (data != null) {
+            //     var response = confirm(
+            //       "Usted tiene la opción de pagar su factura en: PEN " +
+            //         window.amount +
+            //         " o " +
+            //         data["currencyCodeAlpha"] +
+            //         " " +
+            //         data["amount"] +
+            //         ". Una vez haya hecho su elección, la transacción continuará con la moneda seleccionada. Tasa de cambio PEN a " +
+            //         data["currencyCodeAlpha"] +
+            //         ": " +
+            //         data["exchangeRate"] +
+            //         " \n \n" +
+            //         data["currencyCodeAlpha"] +
+            //         " " +
+            //         data["amount"] +
+            //         "\nPEN = " +
+            //         data["currencyCodeAlpha"] +
+            //         " " +
+            //         data["exchangeRate"] +
+            //         "\nMARGEN FX: " +
+            //         data["markup"]
+            //     );
+            //     if (response == true) {
+            //       window.dcc = true;
+            //     } else {
+            //       window.dcc = false;
+            //     }
+            //   }
+            // });
 
-            window.cardExpiry = payform.createElement(
-              "card-expiry",
-              {
-                style: elementStyles,
-                placeholder: "MM/AAAA",
-              },
-              "txtFechaVencimiento"
-            );
-          })
-          .catch((err) => {
-            console.log(err);
+            // element.on("installments", function (data: any) {
+            //   console.log("INSTALLMENTS: ", data);
+            //   if (data != null && window.channel == "web") {
+            //     window.credito = true;
+            //     var cuotas = document.getElementById("cuotas");
+            //     cuotas.style.display = "block";
+
+            //     var select = document.createElement("select");
+            //     select.setAttribute(
+            //       "class",
+            //       "form-control form-control-sm mb-4"
+            //     );
+            //     select.setAttribute("id", "selectCuotas");
+            //     optionDefault = document.createElement("option");
+            //     optionDefault.value = optionDefault.textContent = "Sin cuotas";
+            //     select.appendChild(optionDefault);
+            //     data.forEach(function (item) {
+            //       option = document.createElement("option");
+            //       option.value = option.textContent = item;
+            //       select.appendChild(option);
+            //     });
+            //     cuotas.appendChild(select);
+            //   } else {
+            //     window.credito = false;
+            //     var cuotas = document.getElementById("selectCuotas");
+            //     if (cuotas != undefined) {
+            //       cuotas.parentNode.removeChild(cuotas);
+            //     }
+            //   }
+            // });
+
+            element.on("change", function (data) {
+              console.log("CHANGE CARD: ", data);
+              const cardText: any = document.getElementById("msjNroTarjeta");
+              const cardExp: any = document.getElementById(
+                "msjFechaVencimiento"
+              );
+              const cardCVV: any = document.getElementById("msjCvv");
+              cardText.innerText = "";
+              cardExp.innerText = "";
+              cardCVV.innerText = "";
+              if (data.length != 0) {
+                data.forEach(function (d) {
+                  if (d["code"] == "invalid_number") {
+                    cardText.style.display = "block";
+                    cardText.innerText = d["message"];
+                  }
+                  if (d["code"] == "invalid_expiry") {
+                    cardExp.style.display = "block";
+                    cardExp.innerText = d["message"];
+                  }
+                  if (d["code"] == "invalid_cvc") {
+                    cardCVV.style.display = "block";
+                    cardCVV.innerText = d["message"];
+                  }
+                });
+              }
+            });
           });
+
+          // Cvv2
+          window.cardCvv = payform.createElement(
+            "card-cvc",
+            {
+              style: elementStyles,
+              placeholder: "CVV",
+            },
+            "txtCvv"
+          );
+
+          window.cardExpiry = payform.createElement(
+            "card-expiry",
+            {
+              style: elementStyles,
+              placeholder: "MM/AAAA",
+            },
+            "txtFechaVencimiento"
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    if (form.user_id.length > 1 && boxComplete) {
+      if (window && document && !loadJS) {
+        getVISAForm();
       }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form]);
+  }, [form, boxComplete]);
 
   useEffect(() => {
     if (session.expirationTime) {
@@ -409,6 +454,7 @@ const Checkout: React.FC<CheckoutProps> = ({
             onClick={() => {
               setCheckout(false);
               if (successPayload) {
+                setList([]);
                 setCart([]);
                 route.push("/");
               }
@@ -638,6 +684,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                     <input
                       value={form.user_id}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       type="tel"
                       name="user_id"
                       id="user_id"
@@ -653,6 +700,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                     <input
                       value={form.email}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       type="email"
                       name="email"
                       id="email"

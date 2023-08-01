@@ -5,15 +5,39 @@ const supabase = createClient(process.env.SUP_URL, process.env.SUP_ANN);
 export const setDBOrder = async (
   value,
   name,
+  email,
+  phone,
   address,
+  company,
   postal,
   city,
-  email,
-  order
+  order,
+  status,
+  success,
+  order_num
 ) => {
+  return await supabase.from("orders").insert({
+    value,
+    name,
+    email,
+    phone,
+    address,
+    company,
+    postal,
+    city,
+    order,
+    status,
+    success,
+    order_num,
+  });
+};
+
+export const getDBNum = async () => {
   return await supabase
     .from("orders")
-    .insert({ value, name, address, postal, city, email, order });
+    .select("id")
+    .order("id", { ascending: false })
+    .limit(1);
 };
 
 export const getProducts = async () => {
