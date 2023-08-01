@@ -3,6 +3,7 @@
 import { useGlobalContext } from "@/context/store";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { BiLoaderAlt } from "react-icons/bi";
 
 export default function Admin() {
   const [error, setError] = useState<string>("");
@@ -49,7 +50,7 @@ export default function Admin() {
             required
           />
         </div>
-        {error && <p className="text-sm text-red-800 text-center">{error1}</p>}
+        {error && <p className="text-sm text-red-800 text-center">{error}</p>}
 
         <button
           type="submit"

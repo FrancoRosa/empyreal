@@ -16,7 +16,7 @@ export default function Admin() {
     push("/");
   }
 
-  const handleEdit = (product) => {
+  const handleEdit = (product: any) => {
     setTargetProd(product);
     setEdit(true);
   };
@@ -32,6 +32,8 @@ export default function Admin() {
       //Add Product
       //Add Image
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

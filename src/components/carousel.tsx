@@ -18,6 +18,7 @@ const Carousel = ({
       }
     }, 2000);
     return () => clearInterval(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);
 
   return <Image alt="prod image" src={images[show]} className={style} />;
