@@ -36,6 +36,7 @@ const getSessionToken = async (
   id = "0171225",
   ip
 ) => {
+  console.log(email, id);
   const url = urls("sessionToken") + "/" + merId;
   const options = {
     headers: {

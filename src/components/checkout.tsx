@@ -237,8 +237,16 @@ const Checkout: React.FC<CheckoutProps> = ({
       script.addEventListener("load", () => {
         console.log("..... LOADED JS");
       });
+      console.log("+++++++++++++++++++");
+      console.log({ amount: value, email: form.email, id: form.user_id });
+      console.log("+++++++++++++++++++");
+
       axios
-        .post("/api/session", { amount: value })
+        .post("/api/session", {
+          amount: value,
+          email: form.email,
+          id: form.user_id,
+        })
         .then((res) => {
           setSession(res.data);
           setLoadJS(true);
