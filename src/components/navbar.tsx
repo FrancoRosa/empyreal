@@ -35,7 +35,7 @@ const Navbar = () => {
   const lang = getLang();
 
   return (
-    <nav className="top-0 z-10 bg-white border-gray-200 dark:bg-gray-900 sticky">
+    <nav className="print:hidden top-0 z-10 bg-white border-gray-200 dark:bg-gray-900 sticky">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link href="/" className="flex items-center">
           <Brand />

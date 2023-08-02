@@ -40,6 +40,14 @@ export const getDBNum = async () => {
     .limit(1);
 };
 
+export const getDBOrder = async (order) => {
+  return await supabase
+    .from("orders")
+    .select("*")
+    .eq("order_num", order)
+    .limit(1);
+};
+
 export const getProducts = async () => {
   return await supabase.from("products").select("*");
 };

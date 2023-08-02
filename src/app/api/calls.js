@@ -29,14 +29,7 @@ const getAccessToken = async () => {
   return axios.get(url, options);
 };
 
-const getSessionToken = async (
-  accessToken,
-  amount,
-  email = "integraciones@necomplus.com",
-  id = "0171225",
-  ip
-) => {
-  console.log(email, id);
+const getSessionToken = async (accessToken, amount, email, id, ip) => {
   const url = urls("sessionToken") + "/" + merId;
   const options = {
     headers: {
