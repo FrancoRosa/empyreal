@@ -27,7 +27,7 @@ export default async function Page({
             <Image
               src={qr}
               alt="qr code to go to company web"
-              className="w-20"
+              className="w-20 h-20"
             />
             <div>
               <p className="font-semibold">rtklink</p>
