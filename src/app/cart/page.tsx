@@ -10,8 +10,6 @@ import { useEffect, useState } from "react";
 import { AiFillMinusCircle, AiFillPlusCircle } from "react-icons/ai";
 import { BsFillTrashFill } from "react-icons/bs";
 
-const shipping = 15;
-
 const text: any = {
   checkout: {
     en: "Checkout",
@@ -68,6 +66,13 @@ export default function Cart() {
   };
 
   const [list, setList] = useState(productList(cart));
+  const itemCount: any = list.reduce(
+    (s, i: any) => s + (i.requires_shipping ? i.quantity : 0),
+    0
+  );
+  const shipping = list.some((l: any) => l.requires_shipping)
+    ? 15 * itemCount
+    : 0;
 
   const handleAdd = (product: any) => {
     const newCart = [...cart, product];
@@ -185,6 +190,10 @@ export default function Cart() {
               <tr>
                 <td>{text.shipping[lang]}</td>
                 <td className="pl-8 text-right">{monetize(shipping)}</td>
+              </tr>
+              <tr>
+                <td>Tax</td>
+                <td className="pl-8 text-right">{monetize(0)}</td>
               </tr>
               <tr className="font-semibold">
                 <td>Total:</td>

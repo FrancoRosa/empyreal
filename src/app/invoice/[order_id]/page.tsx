@@ -189,7 +189,7 @@ export default async function Page({
               </tbody>
             </table>
           </div>
-          <p className="absolute bottom-4 right-[6em]">rtklink.com</p>
+          <p className="absolute bottom-6 right-[6em]">rtklink.com</p>
         </div>
       ) : (
         <p className="text-center py-6">Order #{params.order_id} not found</p>
