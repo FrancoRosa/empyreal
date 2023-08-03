@@ -172,7 +172,7 @@ const Checkout: React.FC<CheckoutProps> = ({
               setErrorPayload({
                 orderNum: window.purchase,
                 date: res.data.message.data.TRANSACTION_DATE,
-                description: res.data.message.data.ACTION_DESCRIPTION,
+                description: res.data.message.errorMessage,
               });
               paymentStatus = {
                 success: false,
