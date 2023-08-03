@@ -1,6 +1,8 @@
 // @ts-nocheck
 import { createClient } from "@supabase/supabase-js";
-const supabase = createClient(process.env.SUP_URL, process.env.SUP_ANN);
+const supabase = createClient(process.env.SUP_URL, process.env.SUP_ANN, {
+  auth: { persistSession: false },
+});
 
 export const setDBOrder = async (
   value,
@@ -50,4 +52,12 @@ export const getDBOrder = async (order) => {
 
 export const getProducts = async () => {
   return await supabase.from("products").select("*");
+};
+
+export const getDBProduct = async (product_id) => {
+  return await supabase
+    .from("products")
+    .select("*")
+    .eq("id", product_id)
+    .limit(1);
 };
