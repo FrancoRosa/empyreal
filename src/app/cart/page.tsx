@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { AiFillMinusCircle, AiFillPlusCircle } from "react-icons/ai";
 import { BsFillTrashFill } from "react-icons/bs";
 
-const shipping = 1.5;
+const shipping = 15;
 
 const text: any = {
   checkout: {
