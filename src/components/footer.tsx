@@ -52,7 +52,7 @@ const Footer = () => {
                 {text.contact[lang]}
               </h2>
               <ul className="text-gray-600 dark:text-gray-400 font-medium">
-                <li className="mb-4">
+                {/* <li className="mb-4">
                   <a
                     href="https://goo.gl/maps/P7BYb2WaYgZBi23m9"
                     rel="noreferrer"
@@ -60,7 +60,7 @@ const Footer = () => {
                   >
                     Urb. Kennedy B C-2, Wanchaq, Cusco
                   </a>
-                </li>
+                </li> */}
                 <li className="mb-4">
                   <a
                     href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=support@rtklink.com"
