@@ -4,7 +4,7 @@ import { monetize } from "@/js/helpers";
 import Image from "next/image";
 
 async function getData(order_id: string) {
-  const res = await fetch(`http:localhost:3000/api/orders/${order_id}`);
+  const res = await fetch(`https://rtklink.com/api/orders/${order_id}`);
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }
