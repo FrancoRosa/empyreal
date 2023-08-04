@@ -3,7 +3,7 @@
 import { useGlobalContext } from "@/context/store";
 import { getProducts } from "@/js/api";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Admin() {
   const { auth } = useGlobalContext();
@@ -11,14 +11,18 @@ export default function Admin() {
   const { push } = useRouter();
   const [products, setProducts] = useState<any>([]);
   const [edit, setEdit] = useState<boolean>(false);
-  const [targetProd, setTargetProd] = useState<any>({});
+  const [target, setTarget] = useState<any>({});
+
+  const formRef = useRef();
+
   if (!auth) {
     push("/");
   }
 
   const handleEdit = (product: any) => {
-    setTargetProd(product);
+    setTarget(product);
     setEdit(true);
+    console.log(formRef);
   };
 
   useEffect(() => {
@@ -82,20 +86,26 @@ export default function Admin() {
                         scope="row"
                         className="px-2 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                       >
-                        {product.name_en}
+                        {product.name}
                       </th>
-                      <td className="px-2 py-1">{product.des_en}</td>
+                      <td className="px-2 py-1">{product.description}</td>
                       <td className="px-2 py-1">{product.images.length}</td>
                       <td className="px-2 py-1">{product.stock}</td>
                       <td className="px-2 py-1 text text-right">
                         {product.price}
                       </td>
                     </tr>
-                    {edit && product.id === targetProd.id && (
+                    {edit && product.id === target.id && (
                       <tr>
                         <td className="py-6" colSpan={6}>
-                          <h3 className="text-center">{targetProd.name_en}</h3>
-                          <div className="flex justify-around w-60">
+                          <form ref={formRef}>
+                            <input
+                              id="name"
+                              className="border-b "
+                              type="text"
+                            />
+                          </form>
+                          <div className="flex justify-around w-80 mx-auto">
                             <button className="hover:bg-cyan-700 bg-cyan-500 text-white px-4 py-2 rounded-lg w-28">
                               Save
                             </button>

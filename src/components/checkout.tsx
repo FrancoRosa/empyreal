@@ -693,7 +693,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                       value={form.user_id}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      type="tel"
+                      type="text"
                       name="user_id"
                       id="user_id"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
@@ -750,7 +750,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                       {text.address[lang]}
                     </label>
                     <input
-                      type="tel"
+                      type="text"
                       name="address"
                       id="address"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
@@ -760,7 +760,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                   </div>
                   <div className="flex justify-between gap-8 mt-4">
                     <input
-                      type="tel"
+                      type="text"
                       name="city"
                       id="city"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
