@@ -5,7 +5,7 @@ export const EditProduct = ({ product }: { product: any }) => {
 
   const handleChange = (e: any) => {
     const { id, value } = e.target;
-    setForm((f) => ({ ...f, [id]: value }));
+    setForm((f: any) => ({ ...f, [id]: value }));
   };
   return (
     <>
