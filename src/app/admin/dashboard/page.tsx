@@ -1,19 +1,17 @@
 "use client";
 
+import EditProduct from "@/components/edit_product";
 import { useGlobalContext } from "@/context/store";
 import { getProducts } from "@/js/api";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Admin() {
   const { auth } = useGlobalContext();
-
   const { push } = useRouter();
   const [products, setProducts] = useState<any>([]);
   const [edit, setEdit] = useState<boolean>(false);
   const [target, setTarget] = useState<any>({});
-
-  const formRef = useRef();
 
   if (!auth) {
     push("/");
@@ -22,7 +20,6 @@ export default function Admin() {
   const handleEdit = (product: any) => {
     setTarget(product);
     setEdit(true);
-    console.log(formRef);
   };
 
   useEffect(() => {
@@ -95,27 +92,15 @@ export default function Admin() {
                         {product.price}
                       </td>
                     </tr>
-                    {edit && product.id === target.id && (
-                      <tr>
-                        <td className="py-6" colSpan={6}>
-                          <form ref={formRef}>
-                            <input
-                              id="name"
-                              className="border-b "
-                              type="text"
-                            />
-                          </form>
-                          <div className="flex justify-around w-80 mx-auto">
-                            <button className="hover:bg-cyan-700 bg-cyan-500 text-white px-4 py-2 rounded-lg w-28">
-                              Save
-                            </button>
-                            <button className="hover:bg-red-700 bg-red-500 text-white px-4 py-2 rounded-lg w-28">
-                              Cancel
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    )}
+                    <tr
+                      className={
+                        !edit || product.id !== target.id ? "hidden" : ""
+                      }
+                    >
+                      <td colSpan={6}>
+                        <EditProduct product={product} />
+                      </td>
+                    </tr>
                   </>
                 ))}
               </tbody>
