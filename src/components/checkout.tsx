@@ -68,6 +68,7 @@ const Checkout: React.FC<CheckoutProps> = ({
   const [remaining, setRemaining] = useState(0);
   const [form, setForm] = useState({ user_id: "", email: "" });
   const [boxComplete, setBoxComplete] = useState(false);
+  const [showPay, setShowPay] = useState(false);
 
   const handleBlur = (e) => {
     const { id, value } = e.target;
@@ -298,6 +299,7 @@ const Checkout: React.FC<CheckoutProps> = ({
 
           window.cardNumber.then((element) => {
             console.log("... form loaded");
+            setShowPay(true);
 
             setFormLoad(false);
 
@@ -720,7 +722,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                 </div>
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Company Name
+                    Company name
                   </label>
                   <input
                     type="text"
@@ -853,7 +855,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                 <button
                   type="submit"
                   className="relative w-full text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800 disabled:bg-gray-600 my-0"
-                  disabled={loading}
+                  disabled={loading || !showPay}
                 >
                   {loading && (
                     <BiLoaderAlt className="absolute bottom-2 animate-spin text-2xl" />
