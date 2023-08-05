@@ -31,8 +31,8 @@ export default async function Page({
             />
             <div>
               <p className="font-semibold">rtklink</p>
-              <p>1512 Gettysburg Ave N,</p>
-              <p>Golden valley, 55427</p>
+              <p>Urb. Kennedy B C-2</p>
+              <p>Wanchaq, Cusco 08002</p>
               <p>support@rtklink.com</p>
             </div>
           </div>
