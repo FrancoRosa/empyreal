@@ -47,6 +47,7 @@ const Navbar = () => {
           aria-controls="navbar-default"
           aria-expanded="false"
           onClick={() => setDisplay((s) => !s)}
+          suppressHydrationWarning
         >
           <span className="sr-only">Open main menu</span>
           <svg

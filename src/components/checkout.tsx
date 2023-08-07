@@ -610,6 +610,12 @@ const Checkout: React.FC<CheckoutProps> = ({
                     <p className="text-xs text-center mt-8">
                       {text.paymentSuccessMsg[lang]}
                     </p>
+                    <p className="text-xs text-center mt-8">
+                      You can get your invoice{" "}
+                      <Link href={`/invoice/${successPayload.orderNum}`}>
+                        here
+                      </Link>
+                    </p>
                   </>
                 )}
                 {errorPayload && (

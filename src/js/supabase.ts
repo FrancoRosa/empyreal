@@ -37,7 +37,7 @@ export const setDBOrder = async (
 export const getDBNum = async () => {
   return await supabase
     .from("orders")
-    .select("id")
+    .select("id, uuid")
     .order("id", { ascending: false })
     .limit(1);
 };
@@ -48,6 +48,10 @@ export const getDBOrder = async (order) => {
     .select("*")
     .eq("order_num", order)
     .limit(1);
+};
+
+export const getDBOrderUuid = async (order) => {
+  return await supabase.from("orders").select("*").eq("uuid", order).limit(1);
 };
 
 export const getProducts = async () => {

@@ -1,5 +1,7 @@
+// @ts-nocheck
 import qr from "../../../../public/img/qrcode.png";
 import BrandInvoice from "@/components/brand_invoice";
+import PrintScreen from "@/components/print_screen";
 import { monetize } from "@/js/helpers";
 import Image from "next/image";
 
@@ -18,10 +20,13 @@ export default async function Page({
 }) {
   const order = await getData(params.order_id);
   const data = order[0];
+
   return (
-    <main>
+    <div>
       {data ? (
-        <div className="mt-12 mx-4 font-mono text-sm h-screen">
+        <div className="mt-12 mx-4 font-mono text-sm h-[800px]">
+          <PrintScreen />
+
           <div className="flex justify-between w-full py-6 px-8">
             <BrandInvoice size="text-4xl" />
             <Image
@@ -37,7 +42,7 @@ export default async function Page({
             </div>
           </div>
           <div className="flex mt-8 uppercase font-bold text-xl px-8 justify-between">
-            <h1 className="text-left  ">Invoice</h1>
+            <h1 className="text-left  ">Payment Receipt</h1>
           </div>
           <hr className="mb-10 mx-8" />
 
@@ -194,6 +199,6 @@ export default async function Page({
       ) : (
         <p className="text-center py-6">Order #{params.order_id} not found</p>
       )}
-    </main>
+    </div>
   );
 }
