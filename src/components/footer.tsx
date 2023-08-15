@@ -53,6 +53,9 @@ const Footer = () => {
               </h2>
               <ul className="text-gray-600 dark:text-gray-400 font-medium">
                 <li className="mb-4">
+                  <Link href="/support">{text.form[lang]}</Link>
+                </li>
+                <li className="mb-4">
                   <a
                     href="https://goo.gl/maps/P7BYb2WaYgZBi23m9"
                     rel="noreferrer"
@@ -72,9 +75,6 @@ const Footer = () => {
                   >
                     support@rtklink.com
                   </a>
-                </li>
-                <li className="mb-4">
-                  <Link href="/support">{text.form[lang]}</Link>
                 </li>
               </ul>
             </div>
