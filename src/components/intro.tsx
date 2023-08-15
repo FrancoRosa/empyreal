@@ -1,54 +1,38 @@
-"use client";
-import { getLang } from "@/js/helpers";
 import Brand from "./brand";
 import { images } from "@/js/images";
 import Carousel from "./carousel";
 import Link from "next/link";
 
-const text: any = {
-  intro1: {
-    en: "We are a pioneering company specializing in the development of cutting-edge tracking and reporting software, aimed at enhancing efficiency in the construction and transportation industries. With a strong focus on innovation.",
-    es: "Somos una empresa pionera especializada en el desarrollo de software de seguimiento y reporte de vanguardia, enfocado en mejorar la eficiencia en las industrias de construcción y transporte. Con un fuerte enfoque en la innovación.",
-  },
-  intro2: {
-    en: "has successfully positioned itself as a global leader in this field. By leveraging our advanced technology solutions, we empower businesses to optimize their operations, streamline processes, and ultimately maximize productivity.",
-    es: "se ha posicionado exitosamente como líder mundial en este campo. Al aprovechar nuestras soluciones tecnológicas avanzadas, potenciamos a las empresas para optimizar sus operaciones, agilizar los procesos y, en última instancia, maximizar la productividad.",
-  },
-  solutions: {
-    en: "Our Solutions",
-    es: "Soluciones",
-  },
-  boards: {
-    en: "Development boards",
-    es: "Tarjetas de desarrollo",
-  },
-  antennas: {
-    en: "Antennas and accessories",
-    es: "Antenas y accesorios",
-  },
-  software: {
-    en: "Software and displays",
-    es: "Software y pantallas",
-  },
+export const metadata = {
+  title: "rtklink | Home",
+  description:
+    "Software, hardware and GNSS correction services. We are your positioning partner in the field",
 };
 
 export default function Intro() {
-  const lang = getLang();
   return (
     <section className=" flex flex-col justify-center items-center">
-      <div className="w-full flex justify-center">
+      <div className="w-full flex justify-center py-10">
         <Brand size="text-5xl" />
       </div>
 
-      <p className="text-center text-md px-8 py-5 leading-8 text-gray-800 md:text-xl max-w-xl mx-auto dark:text-gray-300">
-        {text.intro1[lang]}
-        <span className="text-cyan-700"> rtklink </span>
-        {text.intro2[lang]}
+      <p className="text-center px-8 py-8 leading-8 text-gray-800 text-xl max-w-3xl mx-auto dark:text-gray-300">
+        Development of cutting-edge tracking and reporting software, aimed at
+        enhancing efficiency in the construction and transportation industries.
       </p>
-      <h3 className="text-2xl  mt-10">{text.solutions[lang]}</h3>
+      <p className="text-center px-8 py-5 leading-8 text-gray-800 text-xl max-w-3xl mx-auto dark:text-gray-300">
+        At
+        <span className="text-cyan-700"> rtklink </span> our goal is to provide
+        tools to help our clients improve execution management, by accurate
+        positioning machinery in the field.
+      </p>
+
+      <h3 className="text-3xl mt-10 font-semibold text-cyan-600">
+        Our Solutions
+      </h3>
       <div className="flex items-center flex-col lg:flex-row lg:justify-between lg:items-baseline lg:w-full">
         <div className="flex flex-col items-center">
-          <p className="text-semibold py-4">{text.boards[lang]}</p>
+          <p className="text-semibold py-4">Development boards</p>
           <Link href="/shop">
             <Carousel
               images={[images.boards, images.case, images.ublox]}
@@ -57,7 +41,7 @@ export default function Intro() {
           </Link>
         </div>
         <div className="flex flex-col items-center">
-          <p className="text-semibold py-4">{text.antennas[lang]}</p>
+          <p className="text-semibold py-4">Antennas and accessories</p>
           <Link href="/shop">
             <Carousel
               images={[
@@ -72,7 +56,7 @@ export default function Intro() {
           </Link>
         </div>
         <div className="flex flex-col items-center mb-10">
-          <p className="text-semibold py-4">{text.software[lang]}</p>
+          <p className="text-semibold py-4">Software and displays</p>
           <Link href="/shop">
             <Carousel
               images={[images.dell, images.stream]}

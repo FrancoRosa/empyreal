@@ -1,44 +1,9 @@
 "use client";
 
-import { getLang } from "@/js/helpers";
 import { useState } from "react";
 import { BiLoaderAlt } from "react-icons/bi";
 
-const text: any = {
-  title: {
-    en: "Support form",
-    es: "Formulario de soporte tecnico y consultas",
-  },
-  success: {
-    en: "Your message was successfully sent. A team member will reach you out shortly",
-    es: "Tu mensaje fue enviado. Uno de nuestros colaboradores se pondra en contacto contigo a la brevedad",
-  },
-  submit: {
-    en: "Submit",
-    es: "Enviar",
-  },
-  label: {
-    name: {
-      en: "Name",
-      es: "Nombre",
-    },
-    email: {
-      en: "Email",
-      es: "Email",
-    },
-    subject: {
-      en: "Subject",
-      es: "Asunto",
-    },
-    message: {
-      en: "Message",
-      es: "Mensaje",
-    },
-  },
-};
-
 export default function Privacy() {
-  const lang = getLang();
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const handleSubmit = (e: any) => {
@@ -66,11 +31,14 @@ export default function Privacy() {
 
   return (
     <section className="px-20 min-h-screen">
-      <h3 className="text-center font-semibold py-4 text-2xl">
-        {text.title[lang]}
-      </h3>
+      <h1 className="text-3xl mt-10 font-semibold text-cyan-600 text-center mb-8">
+        Support form
+      </h1>
       {success ? (
-        <p className="text-center mt-10">{text.success[lang]}</p>
+        <p className="text-center mt-10">
+          Your message was successfully sent. A team member will reach you out
+          shortly
+        </p>
       ) : (
         <form
           onSubmit={handleSubmit}
@@ -83,7 +51,7 @@ export default function Privacy() {
           <input className="hidden" name="bot-field" />
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              {text.label.name[lang]}
+              Name
             </label>
             <input
               type="text"
@@ -95,7 +63,7 @@ export default function Privacy() {
           </div>
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              {text.label.email[lang]}
+              Email
             </label>
             <input
               type="email"
@@ -108,7 +76,7 @@ export default function Privacy() {
 
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              {text.label.subject[lang]}
+              Subject
             </label>
             <input
               type="text"
@@ -121,7 +89,7 @@ export default function Privacy() {
 
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              {text.label.message[lang]}
+              Message
             </label>
             <textarea
               id="message"
@@ -140,7 +108,7 @@ export default function Privacy() {
             {loading && (
               <BiLoaderAlt className="absolute bottom-2 animate-spin text-2xl" />
             )}
-            {text.submit[lang]}
+            Submit
           </button>
         </form>
       )}

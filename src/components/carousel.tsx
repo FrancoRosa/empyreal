@@ -21,6 +21,14 @@ const Carousel = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);
 
-  return <Image alt="prod image" src={images[show]} className={style} />;
+  return (
+    <Image
+      alt="product image"
+      src={images[show]}
+      className={
+        style + " object-fill w-auto h-20 hover:bg-gray-100 hover:rounded-lg"
+      }
+    />
+  );
 };
 export default Carousel;
