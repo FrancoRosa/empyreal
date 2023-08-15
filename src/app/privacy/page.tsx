@@ -1,10 +1,6 @@
-"use client";
-import { getLang } from "@/js/helpers";
-
 const text: any = {
   title: {
     en: "Privacy Policy",
-    es: "Politica de privacidad",
   },
   law: {
     en: [
@@ -16,24 +12,16 @@ const text: any = {
       "The users will respond, in any case, of the truthfulness of the data provided, reserving on the part of RTKLINK the right to exclude from the registered services any user that has provided false or erroneous information, without prejudice to the other actions that proceed in Law.",
       "To exercise your rights of access, rectification, cancellation and opposition, you must send a written document identifying the reference “Data Protection” to support@rtklink.com.",
     ],
-    es: [
-      "En cumplimiento de lo establecido en la Ley Orgánica 15/1999, de 13 de diciembre, de Protección de Datos de Carácter Personal, RTKLINK comunica lo siguiente:",
-      "De acuerdo con el Artículo 5 de la mencionada Ley, se informa que los datos introducidos en los formularios serán almacenados en un archivo automatizado, propiedad de RTKLINK, que garantiza las medidas de seguridad normativas requeridas.",
-      "El propósito para el cual se proporcionan los formularios es el contacto posterior de la entidad con los usuarios que hayan solicitado hacer una solicitud a nuestra empresa o cualquier otra consulta que el usuario desee realizar.",
-      "Cuando los datos se recopilan del formulario y no de otro campo abierto como el contacto por correo, será necesario proporcionar, al menos, los campos marcados con un asterisco, ya que, de lo contrario, RTKLINK no podrá aceptar o gestionar el cumplimiento de la relación establecida.",
-      "RTKLINK es responsable de los archivos y se compromete a no asignar los datos a un fin distinto para el cual fueron recopilados ni asignarlos ilegítimamente a terceros. También se compromete a tratar sus datos de manera confidencial y aplicar las medidas técnicas, organizativas y de seguridad necesarias para evitar su tratamiento o acceso no autorizado, según lo establecido por las normativas vigentes en materia de protección de datos.",
-      "Los usuarios serán responsables, en todo caso, de la veracidad de los datos proporcionados, reservándose RTKLINK el derecho de excluir de los servicios registrados a cualquier usuario que haya proporcionado información falsa o errónea, sin perjuicio de las demás acciones que correspondan en Derecho.",
-      "Para ejercer sus derechos de acceso, rectificación, cancelación y oposición, deberá enviar un documento escrito identificando la referencia 'Protección de Datos' a support@rtklink.com.",
-    ],
   },
 };
 
 export default function Privacy() {
-  const lang = getLang();
   return (
     <section className="px-20 min-h-screen">
-      <h3 className="text-center font-bold py-4">{text.title[lang]}</h3>
-      {text.law[lang].map((t: any, i: number) => (
+      <h1 className="text-3xl mt-10 font-semibold text-cyan-600 text-center mb-8">
+        Privacy policy
+      </h1>
+      {text.law.en.map((t: any, i: number) => (
         <p key={i} className="py-2 text-justify">
           {t}
         </p>
