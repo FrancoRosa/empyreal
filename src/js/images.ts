@@ -9,6 +9,14 @@ import trimble_zephyr_img from "../../public/img/prod/trimble_zephyr3.png";
 import ublox_img from "../../public/img/prod/ublox.jpg";
 import dell_img from "../../public/img/prod/dell.png";
 
+import cat_img from "../../public/img/application/cat.jpg";
+import skid_img from "../../public/img/application/skid.jpg";
+import truck_img from "../../public/img/application/truck.jpg";
+
+import field_img from "../../public/img/team/field.jpg";
+import solder_img from "../../public/img/team/solder.jpg";
+import talking_img from "../../public/img/team/talking.png";
+
 export const images: any = {
   antenna: antenna_img,
   boards: boards_img,
@@ -21,4 +29,12 @@ export const images: any = {
   trimble_zephyr: trimble_zephyr_img,
   dell: dell_img,
   ublox: ublox_img,
+
+  cat: cat_img,
+  skid: skid_img,
+  truck: truck_img,
+
+  field: field_img,
+  solder: solder_img,
+  talking: talking_img,
 };
