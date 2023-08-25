@@ -82,7 +82,7 @@ const products = [
   {
     id: 6,
     name: {
-      en: "Correction stream (1 month)",
+      en: "Correction stream (1 month) - TX",
       es: "Transmisión de corrección (1 mes)",
     },
     description: {
@@ -90,13 +90,29 @@ const products = [
       es: "Datos de corrección RTCM3 las 24 horas del día, los 7 días de la semana, para lograr una precisión de nivel centimétrico, suscripción de 1 mes.",
     },
     requires_shipping: false,
-    price: 270,
+    price: 500,
     image: "stream",
     price_hidden: false,
     link: "http://www.euref.eu/symposia/2018Amsterdam/03-02-Soehne.pdf",
   },
   {
     id: 7,
+    name: {
+      en: "Correction stream (1 month) - FL",
+      es: "Transmisión de corrección (1 mes)",
+    },
+    description: {
+      en: "RTCM3 correction data 24/7 to get centimeter level accuracy, 1 month subscription. The RTCM correction data will be provided to the client as long as there is internet connection availabe on their devices. The client must send an message with his device ID to enable his stream.",
+      es: "Datos de corrección RTCM3 las 24 horas del día, los 7 días de la semana, para lograr una precisión de nivel centimétrico, suscripción de 1 mes.",
+    },
+    requires_shipping: false,
+    price: 750,
+    image: "stream",
+    price_hidden: false,
+    link: "http://www.euref.eu/symposia/2018Amsterdam/03-02-Soehne.pdf",
+  },
+  {
+    id: 8,
     name: {
       en: "Correction stream (12 month).",
       es: "Transmisión de corrección (12 meses)",
@@ -112,7 +128,7 @@ const products = [
     link: "http://www.euref.eu/symposia/2018Amsterdam/03-02-Soehne.pdf",
   },
   {
-    id: 8,
+    id: 9,
     name: {
       en: "Magnetic antenna mount",
       es: "Soporte magnético para antena",
@@ -128,7 +144,7 @@ const products = [
     link: "",
   },
   {
-    id: 9,
+    id: 10,
     name: {
       en: "GPS-RTK-SMA ZED-F9P",
       es: "GPS-RTK-SMA ZED-F9P",
@@ -144,7 +160,7 @@ const products = [
     link: "https://cdn.sparkfun.com/assets/f/8/d/6/d/ZED-F9P-02B_DataSheet_UBX-21023276.pdf",
   },
   {
-    id: 10,
+    id: 11,
     name: {
       en: "Board case dual RTK",
       es: "Estuche de placa RTK dual",
@@ -160,7 +176,7 @@ const products = [
     link: "",
   },
   {
-    id: 11,
+    id: 12,
     name: {
       en: "Dell Rugged 7212",
       es: "Dell Rugged 7212",
@@ -176,7 +192,7 @@ const products = [
     link: "http://www.ongov.net/911/documents/latitude-rugged-extreme-tablet-ecosystem-guidenew.pdf",
   },
   {
-    id: 12,
+    id: 13,
     name: {
       en: "Correction stream (1hr).",
       es: "Transmisión de corrección (1hr)",
