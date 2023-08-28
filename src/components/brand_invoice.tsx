@@ -1,11 +1,10 @@
-import { BsLink45Deg } from "react-icons/bs";
+import { SlEnergy } from "react-icons/sl";
 
 const BrandInvoice = ({ size = "text-2xl" }) => {
   return (
     <h1 className={`${size} text-cyan-500 font-extrabold flex items-center`}>
-      <span>rtk</span>
-      <BsLink45Deg className={`${size} text-cyan-500 font-extrabold`} />
-      <span>link</span>
+      <SlEnergy className={`${size} text-cyan-500 font-extrabold`} />
+      <span>empyreal energy</span>
     </h1>
   );
 };

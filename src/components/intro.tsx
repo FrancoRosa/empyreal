@@ -5,7 +5,7 @@ import Link from "next/link";
 import CarouselText from "./carousel_text";
 
 export const metadata = {
-  title: "rtklink | Home",
+  title: "empyreal | Home",
   description:
     "Software, hardware and GNSS correction services. We are your positioning partner in the field",
 };
@@ -23,7 +23,7 @@ export default function Intro() {
       </p>
       <p className="text-center px-8 py-5 leading-8 text-gray-800 text-xl max-w-3xl mx-auto dark:text-gray-300">
         At
-        <span className="text-cyan-700"> rtklink </span> our goal is to provide
+        <span className="text-cyan-700"> empyreal </span> our goal is to provide
         tools to help our clients improve execution management, by accurate
         positioning machinery in the field.
       </p>

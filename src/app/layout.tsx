@@ -7,7 +7,7 @@ import { GlobalContextProvider } from "@/context/store";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "rtklink | Home",
+  title: "empyreal | Home",
   description: "Your positioning partner in the field",
 };
 

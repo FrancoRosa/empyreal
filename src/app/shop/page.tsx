@@ -1,7 +1,7 @@
 import Products from "@/components/products";
 
 export const metadata = {
-  title: "rtklink | Shop",
+  title: "empyreal | Shop",
   description: "Your positioning partner in the field",
 };
 export default function Shop() {

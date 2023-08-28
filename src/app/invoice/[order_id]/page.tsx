@@ -6,7 +6,7 @@ import { monetize } from "@/js/helpers";
 import Image from "next/image";
 
 async function getData(order_id: string) {
-  const res = await fetch(`https://rtklink.com/api/orders/${order_id}`);
+  const res = await fetch(`https://empyreal.com/api/orders/${order_id}`);
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }
@@ -35,10 +35,10 @@ export default async function Page({
               className="w-20 h-20"
             />
             <div>
-              <p className="font-semibold">rtklink</p>
+              <p className="font-semibold">empyreal</p>
               <p>Urb. Kennedy B C-2</p>
               <p>Wanchaq, Cusco 08002</p>
-              <p>support@rtklink.com</p>
+              <p>support@empyreal.com</p>
             </div>
           </div>
           <div className="flex mt-8 uppercase font-bold text-xl px-8 justify-between">
@@ -194,7 +194,7 @@ export default async function Page({
               </tbody>
             </table>
           </div>
-          <p className="absolute bottom-6 right-[6em]">rtklink.com</p>
+          <p className="absolute bottom-6 right-[6em]">empyreal.com</p>
         </div>
       ) : (
         <p className="text-center py-6">Order #{params.order_id} not found</p>

@@ -2,7 +2,7 @@
 const nextConfig = {
   env: {
     VISA_COM: "650237285",
-    VISA_USR: "support@rtklink.com",
+    VISA_USR: "support@empyreal.com",
     VISA_PSS: "UpI3pn?n",
     VISA_ENV: "production",
     SUP_URL: "https://bucwgvzgaolztuunhlly.supabase.co",

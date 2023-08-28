@@ -69,11 +69,11 @@ const Footer = () => {
                 </li>
                 <li className="mb-4">
                   <a
-                    href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=support@rtklink.com"
+                    href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=support@empyreal.com"
                     rel="noreferrer"
                     target="_blank"
                   >
-                    support@rtklink.com
+                    support@empyreal.com
                   </a>
                 </li>
               </ul>
@@ -135,7 +135,7 @@ const Footer = () => {
           <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
             © 2023{" "}
             <Link href="/" className="hover:underline">
-              rtklink™
+              empyreal™
             </Link>
             . {text.rights[lang]}.
           </span>

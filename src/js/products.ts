@@ -70,8 +70,8 @@ const products = [
       es: "Placa de rastreo dual RTK",
     },
     description: {
-      en: "rtklink board, centimeter accuracy, and precise heading, USB based ready to connect to any display or software by its USB connectors, it contains two ZED-F9P boards for a rover & moving-base configuration",
-      es: "Placa rtklink, precisión centimétrica y dirección precisa, lista para conectar a cualquier pantalla o software a través de USB. Contiene dos placas ZED-F9P de Ublox para una configuracion rover & moving-base",
+      en: "empyreal board, centimeter accuracy, and precise heading, USB based ready to connect to any display or software by its USB connectors, it contains two ZED-F9P boards for a rover & moving-base configuration",
+      es: "Placa empyreal, precisión centimétrica y dirección precisa, lista para conectar a cualquier pantalla o software a través de USB. Contiene dos placas ZED-F9P de Ublox para una configuracion rover & moving-base",
     },
     requires_shipping: true,
     price: 940,
